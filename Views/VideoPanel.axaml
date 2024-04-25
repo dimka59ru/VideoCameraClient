@@ -2,11 +2,20 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:views="using:App.Views"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="App.Views.VideoPanel">
     <Grid RowDefinitions="Auto, *">
-        <Grid Grid.Row="0" Height="40">
-            <Rectangle  Fill="Brown"/>
-        </Grid>
+        <StackPanel Grid.Row="0" 
+                    Height="50" 
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Center">
+            <!-- <Rectangle  Fill="Brown"/> -->
+            <views:GridButton RowCount="2" ColumnCount="2"/>
+            <views:GridButton RowCount="3" ColumnCount="3"/>
+            <views:GridButton RowCount="4" ColumnCount="4"/>
+            <views:GridButton RowCount="5" ColumnCount="4"/>
+            <views:GridButton RowCount="2" ColumnCount="3"/>
+        </StackPanel>
     </Grid>
 </UserControl>

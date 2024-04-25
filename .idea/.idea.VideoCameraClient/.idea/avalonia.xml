@@ -5,6 +5,7 @@
       <map>
         <entry key="App.axaml" value="App.csproj" />
         <entry key="Assets/Icons.axaml" value="App.csproj" />
+        <entry key="Views/GridButton.axaml" value="App.csproj" />
         <entry key="Views/Home.axaml" value="App.csproj" />
         <entry key="Views/IconButton.axaml" value="App.csproj" />
         <entry key="Views/MainSettings.axaml" value="App.csproj" />

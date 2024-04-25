@@ -1,0 +1,37 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="80" d:DesignHeight="80"
+             x:Class="App.Views.GridButton"
+             x:Name="Root"
+             Width="{Binding ButtonWidth, ElementName=Root}"
+             Height="{Binding ButtonHeight, ElementName=Root}"
+             Margin="4">
+    <Button Margin="0" Padding="0" CornerRadius="0"
+            Background="Transparent">
+        <Border BorderBrush="White" BorderThickness="1"
+                Padding="1">
+            <ItemsControl ItemsSource="{Binding Items, ElementName=Root}">
+
+                <!-- This panel will be used to hold the items -->
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <UniformGrid Rows="{Binding RowCount, ElementName=Root}" 
+                                     Columns="{Binding ColumnCount, ElementName=Root}" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+
+                <!-- Each item will be drawn using this template -->
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border BorderBrush="White" 
+                                BorderThickness="0 0 1 1"
+                                Width="{Binding BorderWidth, ElementName=Root}"
+                                Height="{Binding BorderHeight, ElementName=Root}"></Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </Border>
+    </Button>
+</UserControl>
