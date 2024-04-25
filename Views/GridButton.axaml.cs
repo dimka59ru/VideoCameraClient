@@ -24,29 +24,8 @@ public partial class GridButton : UserControl
         get => _rowCount;
         set => SetAndRaise(RowCountProperty, ref _rowCount, value);
     }
-
-    public double ButtonWidth => 40;
-    public double ButtonHeight => 40;
     
     public ObservableCollection<int> Items { get; } = [];
-
-    private double _borderWidth;
-    public static readonly DirectProperty<GridButton, double> BorderWidthProperty = AvaloniaProperty.RegisterDirect<GridButton, double>(
-        nameof(BorderWidth), o => o.BorderWidth, (o, v) => o.BorderWidth = v);
-    public double BorderWidth
-    {
-        get => _borderWidth;
-        set => SetAndRaise(BorderWidthProperty, ref _borderWidth, value);
-    }
-    
-    private double _borderHeight;
-    public static readonly DirectProperty<GridButton, double> BorderHeightProperty = AvaloniaProperty.RegisterDirect<GridButton, double>(
-        nameof(BorderHeight), o => o.BorderHeight, (o, v) => o.BorderHeight = v);
-    public double BorderHeight
-    {
-        get => _borderHeight;
-        set => SetAndRaise(BorderHeightProperty, ref _borderHeight, value);
-    }
     
     public static readonly StyledProperty<ICommand> CommandProperty = AvaloniaProperty.Register<GridButton, ICommand>(
         "Command");
@@ -74,12 +53,10 @@ public partial class GridButton : UserControl
         base.OnPropertyChanged(change);
         if (change.Property == ColumnCountProperty)
         {
-            BorderWidth = ButtonWidth/ ColumnCount; 
             AddItems();
         }
         else if (change.Property == RowCountProperty)
         {
-            BorderHeight = ButtonHeight/ RowCount;
             AddItems();
         }
     }

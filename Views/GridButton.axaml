@@ -2,18 +2,19 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             mc:Ignorable="d" d:DesignWidth="80" d:DesignHeight="80"
+             mc:Ignorable="d" d:DesignWidth="48" d:DesignHeight="48"
              x:Class="App.Views.GridButton"
              x:Name="Root"
-             Width="{Binding ButtonWidth, ElementName=Root}"
-             Height="{Binding ButtonHeight, ElementName=Root}"
              Margin="4">
     <Button Margin="0" Padding="0" CornerRadius="0"
             Background="Transparent"
             Command="{Binding ElementName=Root, Path=Command}"
-            CommandParameter="{Binding ElementName=Root, Path=CommandParameter}">
-        <Border BorderBrush="White" BorderThickness="1"
-                Padding="1">
+            CommandParameter="{Binding ElementName=Root, Path=CommandParameter}"
+            Width="40"
+            Height="40">
+        <Grid>
+            <Border BorderBrush="White" 
+                    BorderThickness="1">
             <ItemsControl ItemsSource="{Binding Items, ElementName=Root}">
 
                 <!-- This panel will be used to hold the items -->
@@ -29,11 +30,11 @@
                     <DataTemplate>
                         <Border BorderBrush="White" 
                                 BorderThickness="0 0 1 1"
-                                Width="{Binding BorderWidth, ElementName=Root}"
-                                Height="{Binding BorderHeight, ElementName=Root}"></Border>
+                                Margin="0 0 -1 -1"/>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
-        </Border>
+            </Border>
+        </Grid>
     </Button>
 </UserControl>

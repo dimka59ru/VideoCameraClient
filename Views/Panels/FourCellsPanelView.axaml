@@ -3,18 +3,27 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             xmlns:vm="using:App.ViewModels"
+             x:DataType="vm:FourCellsPanelViewModel"
              x:Class="App.Views.Panels.FourCellsPanelView">
-    <Grid ColumnDefinitions="*, *" RowDefinitions="*, *">
-        <Grid.Styles>
-            <Style Selector="Border">
-                <Setter Property="BorderBrush" Value="White"></Setter>
-                <Setter Property="BorderThickness" Value="1"></Setter>
-            </Style>
-        </Grid.Styles>
-        <Border Grid.Row="0" Grid.Column="0"></Border>
-        <Border Grid.Row="0" Grid.Column="1"></Border>
-        <Border Grid.Row="1" Grid.Column="0"></Border>
-        <Border Grid.Row="1" Grid.Column="1"></Border>
-        
+    <Grid>
+        <ItemsControl ItemsSource="{Binding Items}">
+
+            <!-- This panel will be used to hold the items -->
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <UniformGrid Rows="2" Columns="2" />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+
+            <!-- Each item will be drawn using this template -->
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Border BorderBrush="White" 
+                            BorderThickness="1"
+                            ></Border>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
     </Grid>
 </UserControl>
