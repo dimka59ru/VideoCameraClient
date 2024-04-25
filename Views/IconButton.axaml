@@ -8,20 +8,30 @@
     <Style Selector="controls|IconButton">
         <!-- Set Defaults -->
         <Setter Property="PathIcon" Value="{StaticResource drink_coffee_regular}"></Setter>
+        <Setter Property="BorderThickness" Value="2 0 0 0"></Setter>
+        <Setter Property="BorderBrush" Value="Transparent"></Setter>
+        <Setter Property="Foreground" Value="Wheat"></Setter>
         <Setter Property="Template">
             <ControlTemplate>
                 <Button Width="{TemplateBinding Width}"
-                        Command="{TemplateBinding Command}">
-                    <StackPanel Orientation="Horizontal" >
-                        <PathIcon Data="{TemplateBinding PathIcon}"
-                                  Foreground="White" 
-                                  VerticalAlignment="Center"
-                                  Margin="0 0 5 0"/>
-                        <TextBlock Foreground="White"
-                                   VerticalAlignment="Center"
-                                   Text="{TemplateBinding Text}"/> 
-                    </StackPanel>
-                </Button>
+                        Height="{TemplateBinding Width}"
+                        Command="{TemplateBinding Command}"
+                        Background="{TemplateBinding Background}"
+                        Padding="0">
+                    <Border BorderThickness="{TemplateBinding BorderThickness}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            Padding="{TemplateBinding Padding}">
+                        <StackPanel Orientation="Horizontal" >
+                            <PathIcon Data="{TemplateBinding PathIcon}"
+                                      Foreground="{TemplateBinding Foreground}" 
+                                      VerticalAlignment="Center"
+                                      Margin="0 0 5 0"/>
+                            <TextBlock Foreground="{TemplateBinding Foreground}"
+                                       VerticalAlignment="Center"
+                                       Text="{TemplateBinding Text}"/> 
+                        </StackPanel>
+                    </Border>
+                </Button> 
             </ControlTemplate>
         </Setter>
     </Style>

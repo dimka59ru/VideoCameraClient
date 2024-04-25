@@ -34,41 +34,60 @@
     </Design.DataContext>
 
     <Grid>
-        <Border Background="#212529"/>
+        <Border Background="#333333"/>
 
         <Grid ColumnDefinitions="Auto, *">
 
-            <Grid HorizontalAlignment="Left">
-
-                <Border Background="#272B2F"/>
-
-                <Grid RowDefinitions="Auto, Auto, *, Auto">
+            <!-- Left menu -->
+            <Grid Background="#444444" 
+                  HorizontalAlignment="Left">
+                <Grid.Styles>
+                    <Style Selector="views|IconButton">
+                        <Setter Property="Width" Value="120"></Setter>
+                        <Setter Property="Height" Value="40"></Setter>
+                        <Setter Property="Foreground" Value="White"></Setter>
+                        <Setter Property="Padding" Value="5 0 0 0"></Setter>
+                    </Style>
+                    <Style Selector="views|IconButton.IsVideoPanel, 
+                                     views|IconButton.IsMainSettings">
+                        <Setter Property="Background" Value="#333333"></Setter>
+                        <Setter Property="BorderBrush" Value="White"></Setter>
+                    </Style>
+                    <Style Selector="views|IconButton > Button">
+                        <Setter Property="CornerRadius" Value="0"></Setter>
+                        <Setter Property="BorderThickness" Value="0"></Setter>
+                    </Style>
+                    <Style Selector="views|IconButton > Button:pressed /template/ ContentPresenter">
+                        <Setter Property="BorderThickness" Value="0"></Setter>
+                    </Style>
                     
-                    <views:IconButton Grid.Row="0"   
+                </Grid.Styles>
+                <Grid RowDefinitions="40, Auto, Auto, *, Auto">
+                    
+                    <views:IconButton Grid.Row="1"   
                                       PathIcon="{StaticResource app_folder_regular}"
                                       Command="{Binding OpenVideoPanelCommand, Mode=OneTime}"
                                       Text="VideoPanel"
-                                      Width="120"/>
+                                      Classes.IsVideoPanel="{Binding IsVideoPanelSelected}">
+                    </views:IconButton>
                     
-                    <views:IconButton Grid.Row="1"
+                    <views:IconButton Grid.Row="2"
                                       PathIcon="{StaticResource person_regular}"
                                       Command="{Binding PersonCommand, Mode=OneTime}"
-                                      Text="Person"
-                                      Width="120"/>
+                                      Text="Person"/>
                     
-                    
-                    <views:IconButton Grid.Row="3"
+                    <views:IconButton Grid.Row="4"
                                       PathIcon="{StaticResource settings_regular}"
                                       Command="{Binding MainSettingsCommand, Mode=OneTime}"
                                       Text="Settings"
-                                      Width="120"/>
+                                      Classes.IsMainSettings="{Binding IsMainSettingSelected}"/>
                     
                 </Grid>
 
             </Grid>
 
             <Grid Grid.Column="1">
-                <ContentControl Content="{Binding CurrentView}" />
+                <ContentControl Content="{Binding CurrentView}" x:Name="MainContent"/>
             </Grid>
             
         </Grid>
