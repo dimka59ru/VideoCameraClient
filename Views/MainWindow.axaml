@@ -36,7 +36,7 @@
     <Grid>
         <Border Background="#212529"/>
 
-        <Grid ColumnDefinitions="Auto, 622">
+        <Grid ColumnDefinitions="Auto, *">
 
             <Grid HorizontalAlignment="Left">
 

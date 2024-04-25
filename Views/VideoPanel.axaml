@@ -4,5 +4,9 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="App.Views.VideoPanel">
-    Welcome to Avalonia!
+    <Grid RowDefinitions="Auto, *">
+        <Grid Grid.Row="0" Height="40">
+            <Rectangle  Fill="Brown"/>
+        </Grid>
+    </Grid>
 </UserControl>
