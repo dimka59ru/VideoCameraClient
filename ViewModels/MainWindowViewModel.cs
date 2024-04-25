@@ -12,20 +12,20 @@ public class MainWindowViewModel : ViewModelBase
             set => this.RaiseAndSetIfChanged(ref _currentView, value);
         }
         
-        public ICommand HomeCommand { get; }
+        public ICommand OpenVideoPanelCommand { get; }
         public ICommand PersonCommand { get; }
         public ICommand MainSettingsCommand { get; }
 
-        private void Home() => CurrentView = new HomeViewModel();
+        private void VideoPanel() => CurrentView = new VideoPanelViewModel();
         private void Person() => CurrentView = new PersonViewModel();
         private void MainSettings() => CurrentView = new MainSettingsViewModel();
 
         public MainWindowViewModel()
         {
-            HomeCommand = ReactiveCommand.Create(Home);
+            OpenVideoPanelCommand = ReactiveCommand.Create(VideoPanel);
             PersonCommand = ReactiveCommand.Create(Person);
             MainSettingsCommand = ReactiveCommand.Create(MainSettings);
 
-            CurrentView = new HomeViewModel();
+            CurrentView = new VideoPanelViewModel();
         }
 }
