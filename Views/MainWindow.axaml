@@ -15,7 +15,7 @@
         Background="Transparent">
         
         <Window.DataTemplates>
-            <DataTemplate DataType="{x:Type vm:VideoPanelViewModel}">
+            <DataTemplate DataType="{x:Type vm:MainVideoPanelViewModel}">
                 <views:VideoPanel/>
             </DataTemplate>
             <DataTemplate DataType="{x:Type vm:PersonViewModel}">
@@ -62,7 +62,7 @@
                     </Style>
                     
                 </Grid.Styles>
-                <Grid RowDefinitions="40, Auto, Auto, *, Auto">
+                <Grid RowDefinitions="50, Auto, Auto, *, Auto">
                     
                     <views:IconButton Grid.Row="1"   
                                       PathIcon="{StaticResource app_folder_regular}"
@@ -87,7 +87,7 @@
             </Grid>
 
             <Grid Grid.Column="1">
-                <ContentControl Content="{Binding CurrentView}" x:Name="MainContent"/>
+                <ContentControl Content="{Binding CurrentView}"/>
             </Grid>
             
         </Grid>

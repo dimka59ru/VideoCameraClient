@@ -1,6 +1,6 @@
 namespace App.ViewModels;
 
-public class MainSettingsViewModel
+public class MainSettingsViewModel : ViewModelBase
 {
     
 }

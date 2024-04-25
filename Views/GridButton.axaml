@@ -9,7 +9,9 @@
              Height="{Binding ButtonHeight, ElementName=Root}"
              Margin="4">
     <Button Margin="0" Padding="0" CornerRadius="0"
-            Background="Transparent">
+            Background="Transparent"
+            Command="{Binding ElementName=Root, Path=Command}"
+            CommandParameter="{Binding ElementName=Root, Path=CommandParameter}">
         <Border BorderBrush="White" BorderThickness="1"
                 Padding="1">
             <ItemsControl ItemsSource="{Binding Items, ElementName=Root}">

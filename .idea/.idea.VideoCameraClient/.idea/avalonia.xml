@@ -10,6 +10,9 @@
         <entry key="Views/IconButton.axaml" value="App.csproj" />
         <entry key="Views/MainSettings.axaml" value="App.csproj" />
         <entry key="Views/MainWindow.axaml" value="App.csproj" />
+        <entry key="Views/Panels/4CellPanelView.axaml" value="App.csproj" />
+        <entry key="Views/Panels/FourCellsPanelView.axaml" value="App.csproj" />
+        <entry key="Views/Panels/NineCellsPanelViewModel.axaml" value="App.csproj" />
         <entry key="Views/VideoPanel.axaml" value="App.csproj" />
       </map>
     </option>

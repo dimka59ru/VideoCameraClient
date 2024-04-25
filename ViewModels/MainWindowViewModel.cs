@@ -5,8 +5,8 @@ namespace App.ViewModels;
 
 public class MainWindowViewModel : ViewModelBase
 {
-    private object? _currentView;
-    public object? CurrentView
+    private ViewModelBase? _currentView;
+    public ViewModelBase? CurrentView
     {
         get =>_currentView;
         set
@@ -20,7 +20,7 @@ public class MainWindowViewModel : ViewModelBase
     public ICommand PersonCommand { get; }
     public ICommand MainSettingsCommand { get; }
     
-    public bool IsVideoPanelSelected => CurrentView is VideoPanelViewModel;
+    public bool IsVideoPanelSelected => CurrentView is MainVideoPanelViewModel;
     public bool IsMainSettingSelected => CurrentView is MainSettingsViewModel;
     
     public MainWindowViewModel()
@@ -29,10 +29,10 @@ public class MainWindowViewModel : ViewModelBase
         PersonCommand = ReactiveCommand.Create(Person);
         MainSettingsCommand = ReactiveCommand.Create(MainSettings);
 
-        CurrentView = new VideoPanelViewModel();
+        CurrentView = new MainVideoPanelViewModel();
     }
     
-    private void VideoPanel() => CurrentView = new VideoPanelViewModel();
+    private void VideoPanel() => CurrentView = new MainVideoPanelViewModel();
     private void Person() => CurrentView = new PersonViewModel();
     private void MainSettings() => CurrentView = new MainSettingsViewModel();
 

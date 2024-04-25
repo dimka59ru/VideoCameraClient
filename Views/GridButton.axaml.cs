@@ -1,7 +1,7 @@
 using System.Collections.ObjectModel;
+using System.Windows.Input;
 using Avalonia;
 using Avalonia.Controls;
-using ReactiveUI;
 
 namespace App.Views;
 
@@ -48,11 +48,27 @@ public partial class GridButton : UserControl
         set => SetAndRaise(BorderHeightProperty, ref _borderHeight, value);
     }
     
+    public static readonly StyledProperty<ICommand> CommandProperty = AvaloniaProperty.Register<GridButton, ICommand>(
+        "Command");
+    public ICommand Command
+    {
+        get => GetValue(CommandProperty);
+        set => SetValue(CommandProperty, value);
+    }
+
+    public static readonly StyledProperty<object> CommandParameterProperty = AvaloniaProperty.Register<GridButton, object>(
+        "CommandParameter");
+    public object CommandParameter
+    {
+        get => GetValue(CommandParameterProperty);
+        set => SetValue(CommandParameterProperty, value);
+    }
+    
     public GridButton()
     {
         InitializeComponent();
     }
-
+    
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {
         base.OnPropertyChanged(change);

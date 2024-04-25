@@ -3,19 +3,40 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:views="using:App.Views"
+             xmlns:panels="using:App.Views.Panels"
+             xmlns:vm="using:App.ViewModels"
+             x:DataType="vm:MainVideoPanelViewModel"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="App.Views.VideoPanel">
+    <Design.DataContext>
+        <vm:MainVideoPanelViewModel/>
+    </Design.DataContext>
+    <UserControl.DataTemplates>
+        <DataTemplate DataType="{x:Type vm:FourCellsPanelViewModel}">
+            <panels:FourCellsPanelView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:NineCellsPanelViewModel}">
+            <panels:NineCellsPanelView/>
+        </DataTemplate>
+    </UserControl.DataTemplates>
     <Grid RowDefinitions="Auto, *">
         <StackPanel Grid.Row="0" 
                     Height="50" 
                     Orientation="Horizontal"
                     HorizontalAlignment="Center">
             <!-- <Rectangle  Fill="Brown"/> -->
-            <views:GridButton RowCount="2" ColumnCount="2"/>
-            <views:GridButton RowCount="3" ColumnCount="3"/>
+            <views:GridButton RowCount="2" ColumnCount="2"
+                              Command="{Binding OpenVideoPanelCommand}"
+                              CommandParameter="four"/>
+            <views:GridButton RowCount="3" ColumnCount="3"
+                              Command="{Binding OpenVideoPanelCommand}"
+                              CommandParameter="nine"/>
             <views:GridButton RowCount="4" ColumnCount="4"/>
-            <views:GridButton RowCount="5" ColumnCount="4"/>
-            <views:GridButton RowCount="2" ColumnCount="3"/>
+            <views:GridButton RowCount="5" ColumnCount="5"/>
         </StackPanel>
+        
+        <Grid Grid.Row="1">
+            <ContentControl Content="{Binding CurrentPanel}"/>
+        </Grid>
     </Grid>
 </UserControl>
