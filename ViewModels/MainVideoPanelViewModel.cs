@@ -1,5 +1,4 @@
 using System.Reactive;
-using System.Windows.Input;
 using ReactiveUI;
 
 namespace App.ViewModels;
@@ -24,19 +23,11 @@ public class MainVideoPanelViewModel : ViewModelBase
 
     private void OpenVideoPanel(string countCells)
     {
-        switch (countCells)
+        CurrentPanel = countCells switch
         {
-            case "four":
-                CurrentPanel = new FourCellsPanelViewModel();
-                break;
-            case "nine":
-                CurrentPanel = new NineCellsPanelViewModel();
-                break;
-            default:
-                CurrentPanel = new FourCellsPanelViewModel();
-                break;
-        }
+            "four" => new FourCellsPanelViewModel(),
+            "nine" => new NineCellsPanelViewModel(),
+            _ => new FourCellsPanelViewModel()
+        };
     }
-
-    //private void VideoPanel() => CurrentPanel = new VideoPanelViewModel();
 }
