@@ -1,0 +1,28 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:controls="using:App.Views">
+    <Design.PreviewWith>
+        <controls:IconButton />
+    </Design.PreviewWith>
+
+    <Style Selector="controls|IconButton">
+        <!-- Set Defaults -->
+        <Setter Property="PathIcon" Value="{StaticResource drink_coffee_regular}"></Setter>
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Button Width="{TemplateBinding Width}"
+                        Command="{TemplateBinding Command}">
+                    <StackPanel Orientation="Horizontal" >
+                        <PathIcon Data="{TemplateBinding PathIcon}"
+                                  Foreground="White" 
+                                  VerticalAlignment="Center"
+                                  Margin="0 0 5 0"/>
+                        <TextBlock Foreground="White"
+                                   VerticalAlignment="Center"
+                                   Text="{TemplateBinding Text}"/> 
+                    </StackPanel>
+                </Button>
+            </ControlTemplate>
+        </Setter>
+    </Style>
+</Styles>

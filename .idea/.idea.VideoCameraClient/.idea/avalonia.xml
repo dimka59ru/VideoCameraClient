@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AvaloniaProject">
+    <option name="projectPerEditor">
+      <map>
+        <entry key="App.axaml" value="App.csproj" />
+        <entry key="Assets/Icons.axaml" value="App.csproj" />
+        <entry key="Views/Home.axaml" value="PageNavigationAvaloniaApp.csproj" />
+        <entry key="Views/IconButton.axaml" value="App.csproj" />
+        <entry key="Views/MainSettings.axaml" value="App.csproj" />
+        <entry key="Views/MainWindow.axaml" value="App.csproj" />
+      </map>
+    </option>
+  </component>
+</project>

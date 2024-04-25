@@ -1,0 +1,76 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:App.ViewModels"
+        xmlns:views="using:App.Views"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="700" d:DesignHeight="450"
+        x:Class="App.Views.MainWindow"
+        x:DataType="vm:MainWindowViewModel"
+        Icon="/Assets/avalonia-logo.ico"
+        Title="App"
+        Width="850"
+        Height="650"
+        WindowStartupLocation="CenterScreen"
+        Background="Transparent">
+        
+        <Window.DataTemplates>
+            <DataTemplate DataType="{x:Type vm:HomeViewModel}">
+                <views:Home/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type vm:PersonViewModel}">
+                <views:Person/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type vm:MainSettingsViewModel}">
+                <views:MainSettings/>
+            </DataTemplate>
+        </Window.DataTemplates>
+
+
+    <Design.DataContext>
+        <!-- This only sets the DataContext for the previewer in an IDE,
+             to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
+        <vm:MainWindowViewModel/>
+    </Design.DataContext>
+
+    <Grid>
+        <Border Background="#212529"/>
+
+        <Grid ColumnDefinitions="100, 622">
+
+            <Grid HorizontalAlignment="Left">
+
+                <Border Background="#272B2F"/>
+
+                <Grid RowDefinitions="Auto, Auto, *, Auto">
+                    
+                    <views:IconButton Grid.Row="0"   
+                                      PathIcon="{StaticResource home_regular}"
+                                      Command="{Binding HomeCommand, Mode=OneTime}"
+                                      Text="Home"
+                                      Width="100"/>
+                    
+                    <views:IconButton Grid.Row="1"
+                                      PathIcon="{StaticResource person_regular}"
+                                      Command="{Binding PersonCommand, Mode=OneTime}"
+                                      Text="Person"
+                                      Width="100"/>
+                    
+                    
+                    <views:IconButton Grid.Row="3"
+                                      PathIcon="{StaticResource settings_regular}"
+                                      Command="{Binding MainSettingsCommand, Mode=OneTime}"
+                                      Text="Settings"
+                                      Width="100"/>
+                    
+                </Grid>
+
+            </Grid>
+
+            <Grid Grid.Column="1">
+                <ContentControl Content="{Binding CurrentView}" />
+            </Grid>
+            
+        </Grid>
+    </Grid>
+</Window>
