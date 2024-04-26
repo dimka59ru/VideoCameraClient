@@ -1,3 +1,5 @@
+using System;
+using System.Collections.ObjectModel;
 using System.Reactive;
 using ReactiveUI;
 
@@ -5,29 +7,68 @@ namespace App.ViewModels;
 
 public class MainVideoPanelViewModel : ViewModelBase
 {
-    private ViewModelBase? _currentPanel;
+    private int _columnCount;
+    private int _rowCount;
     
-    public ViewModelBase? CurrentPanel
+    public int ColumnCount
     {
-        get => _currentPanel;
-        set => this.RaiseAndSetIfChanged(ref _currentPanel, value);
+        get => _columnCount;
+        set => this.RaiseAndSetIfChanged(ref _columnCount, value);
     }
-
+    
+    public int RowCount
+    {
+        get => _rowCount;
+        set => this.RaiseAndSetIfChanged(ref _rowCount, value);
+    }
+    
+    public ObservableCollection<int> Items { get; } = [];
     public ReactiveCommand<string, Unit> OpenVideoPanelCommand { get; }
 
     public MainVideoPanelViewModel()
     {
         OpenVideoPanelCommand = ReactiveCommand.Create<string>(OpenVideoPanel);
-        CurrentPanel = new FourCellsPanelViewModel();
+        UpdateVideoPanel(4);
     }
 
     private void OpenVideoPanel(string countCells)
     {
-        CurrentPanel = countCells switch
+        switch (countCells)
         {
-            "four" => new FourCellsPanelViewModel(),
-            "nine" => new NineCellsPanelViewModel(),
-            _ => new FourCellsPanelViewModel()
-        };
+            case "four":
+                UpdateVideoPanel(4);
+                break;
+            case "nine":
+                UpdateVideoPanel(9);
+                break;
+            case "sixteen":
+                UpdateVideoPanel(16);
+                break;
+            case "twenty_five":
+                UpdateVideoPanel(25);
+                break;
+            default:
+                UpdateVideoPanel(4);
+                break;
+        }
+    }
+
+    private void UpdateVideoPanel(int countCells)
+    {
+        RowCount = (int)Math.Sqrt(countCells);
+        ColumnCount = (int)Math.Sqrt(countCells);
+
+        var requiredCells = RowCount * ColumnCount;
+        var currentCountCells = Items.Count;
+        var addCell = requiredCells - currentCountCells;
+        
+        for (var i = currentCountCells; i <= requiredCells; i++)
+        {
+            Items.Add(i);
+        }
+        for (var i = currentCountCells; i >= requiredCells; i--)
+        {
+            Items.Remove(i);
+        }
     }
 }

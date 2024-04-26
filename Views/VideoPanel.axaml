@@ -3,7 +3,6 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:views="using:App.Views"
-             xmlns:panels="using:App.Views.Panels"
              xmlns:vm="using:App.ViewModels"
              x:DataType="vm:MainVideoPanelViewModel"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
@@ -11,17 +10,12 @@
     <Design.DataContext>
         <vm:MainVideoPanelViewModel/>
     </Design.DataContext>
-    <UserControl.DataTemplates>
-        <DataTemplate DataType="{x:Type vm:FourCellsPanelViewModel}">
-            <panels:FourCellsPanelView/>
-        </DataTemplate>
-        <DataTemplate DataType="{x:Type vm:NineCellsPanelViewModel}">
-            <panels:NineCellsPanelView/>
-        </DataTemplate>
-    </UserControl.DataTemplates>
+    
     <Grid RowDefinitions="Auto, *">
-        <StackPanel Grid.Row="0" 
-                    Height="50" 
+        
+        <!-- Select Panel Buttons -->
+        <StackPanel Grid.Row="0"
+                    Height="50"
                     Orientation="Horizontal"
                     HorizontalAlignment="Center">
             <!-- <Rectangle  Fill="Brown"/> -->
@@ -31,12 +25,36 @@
             <views:GridButton RowCount="3" ColumnCount="3"
                               Command="{Binding OpenVideoPanelCommand}"
                               CommandParameter="nine"/>
-            <views:GridButton RowCount="4" ColumnCount="4"/>
-            <views:GridButton RowCount="5" ColumnCount="5"/>
+            <views:GridButton RowCount="4" ColumnCount="4"
+                              Command="{Binding OpenVideoPanelCommand}"
+                              CommandParameter="sixteen"/>
+            <views:GridButton RowCount="5" ColumnCount="5"
+                              Command="{Binding OpenVideoPanelCommand}"
+                              CommandParameter="twenty_five"/>
         </StackPanel>
         
+        <!-- Video Panel-->
         <Grid Grid.Row="1">
-            <ContentControl Content="{Binding CurrentPanel}"/>
+            <ItemsControl ItemsSource="{Binding Items}">
+
+                <!-- This panel will be used to hold the items -->
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <UniformGrid Rows="{Binding RowCount}" 
+                                     Columns="{Binding ColumnCount}" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+
+                <!-- Each item will be drawn using this template -->
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border BorderBrush="White" 
+                                BorderThickness="1"
+                        ></Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
         </Grid>
+        
     </Grid>
 </UserControl>
