@@ -1,4 +1,6 @@
-﻿using System.Windows.Input;
+﻿using System;
+using System.Windows.Input;
+using App.VideoSources;
 using ReactiveUI;
 
 namespace App.ViewModels;
@@ -11,6 +13,8 @@ public class MainWindowViewModel : ViewModelBase
         get =>_currentView;
         set
         {
+            if (_currentView is IDisposable view)
+                view.Dispose();
             this.RaiseAndSetIfChanged(ref _currentView, value);
             RaiseProperties();
         }
@@ -21,17 +25,27 @@ public class MainWindowViewModel : ViewModelBase
     
     public bool IsVideoPanelSelected => CurrentView is MainVideoPanelViewModel;
     public bool IsMainSettingSelected => CurrentView is MainSettingsViewModel;
-    
+
+    private IVideoSource VideoSource { get; }
+
     public MainWindowViewModel()
     {
         OpenVideoPanelCommand = ReactiveCommand.Create(VideoPanel);
         MainSettingsCommand = ReactiveCommand.Create(MainSettings);
 
-        CurrentView = new MainVideoPanelViewModel();
+        VideoSource = new RandomImagesVideoSource();
+        CurrentView = new MainVideoPanelViewModel(VideoSource);
     }
     
-    private void VideoPanel() => CurrentView = new MainVideoPanelViewModel();
-    private void MainSettings() => CurrentView = new MainSettingsViewModel();
+    private void VideoPanel()
+    {
+        CurrentView = new MainVideoPanelViewModel(VideoSource);
+    }
+
+    private void MainSettings()
+    {
+        CurrentView = new MainSettingsViewModel();
+    }
 
     private void RaiseProperties()
     {

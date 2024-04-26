@@ -1,0 +1,25 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:App.ViewModels"
+             x:DataType="vm:VideoPlayerViewModel"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="App.Views.VideoPlayerView">
+    <Grid RowDefinitions="*, Auto">
+        
+        <!-- Image -->
+        <Grid>
+            <Image x:Name="VideoImage" x:FieldModifier="private" UseLayoutRounding="True" 
+                   Source="{Binding FrameImage, Mode=OneWay}"/>
+        </Grid>
+        
+        <Grid Grid.Row="1">
+            <StackPanel Orientation="Horizontal" Height="40">
+                <Button>Start</Button>
+                <Button>Stop</Button>
+            </StackPanel>
+        </Grid>
+        
+    </Grid>
+</UserControl>

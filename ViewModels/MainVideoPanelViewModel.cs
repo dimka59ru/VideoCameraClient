@@ -1,12 +1,14 @@
 using System;
 using System.Collections.ObjectModel;
 using System.Reactive;
+using App.VideoSources;
 using ReactiveUI;
 
 namespace App.ViewModels;
 
-public class MainVideoPanelViewModel : ViewModelBase
+public class MainVideoPanelViewModel : ViewModelBase, IDisposable
 {
+    private readonly IVideoSource _videoSource;
     private int _columnCount;
     private int _rowCount;
     
@@ -25,8 +27,11 @@ public class MainVideoPanelViewModel : ViewModelBase
     public ObservableCollection<VideoCellViewModel> Items { get; } = [];
     public ReactiveCommand<string, Unit> OpenVideoPanelCommand { get; }
 
-    public MainVideoPanelViewModel()
+    
+    
+    public MainVideoPanelViewModel(IVideoSource videoSource)
     {
+        _videoSource = videoSource ?? throw new ArgumentNullException(nameof(videoSource));
         OpenVideoPanelCommand = ReactiveCommand.Create<string>(OpenVideoPanel);
         UpdateVideoPanel(4);
     }
@@ -64,14 +69,26 @@ public class MainVideoPanelViewModel : ViewModelBase
         var requiredCells = RowCount * ColumnCount;
         var currentCountCells = Items.Count;
         
-        for (var i = currentCountCells; i <= requiredCells; i++)
+        for (var i = currentCountCells; i < requiredCells; i++)
         {
-            var videoCell = new VideoCellViewModel(i+1);
+            var videoCell = new VideoCellViewModel(i+1, _videoSource);
             Items.Add(videoCell);
         }
-        for (var i = currentCountCells; i >= requiredCells; i--)
+        for (var i = currentCountCells; i > requiredCells; i--)
         {
-            Items.RemoveAt(i);
+            var videoCell = Items[i-1];
+            Items.Remove(videoCell);
+            videoCell.Dispose();
+        }
+    }
+
+    public void Dispose()
+    {
+        while (Items.Count > 0)
+        {
+            var view = Items[0];
+            view.Dispose();
+            Items.Remove(view);
         }
     }
 }
