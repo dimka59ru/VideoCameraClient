@@ -18,9 +18,6 @@
             <DataTemplate DataType="{x:Type vm:MainVideoPanelViewModel}">
                 <views:VideoPanel/>
             </DataTemplate>
-            <DataTemplate DataType="{x:Type vm:PersonViewModel}">
-                <views:Person/>
-            </DataTemplate>
             <DataTemplate DataType="{x:Type vm:MainSettingsViewModel}">
                 <views:MainSettings/>
             </DataTemplate>
@@ -68,13 +65,7 @@
                                       PathIcon="{StaticResource app_folder_regular}"
                                       Command="{Binding OpenVideoPanelCommand, Mode=OneTime}"
                                       Text="VideoPanel"
-                                      Classes.IsVideoPanel="{Binding IsVideoPanelSelected}">
-                    </views:IconButton>
-                    
-                    <views:IconButton Grid.Row="2"
-                                      PathIcon="{StaticResource person_regular}"
-                                      Command="{Binding PersonCommand, Mode=OneTime}"
-                                      Text="Person"/>
+                                      Classes.IsVideoPanel="{Binding IsVideoPanelSelected}"/>
                     
                     <views:IconButton Grid.Row="4"
                                       PathIcon="{StaticResource settings_regular}"

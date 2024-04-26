@@ -17,7 +17,6 @@ public class MainWindowViewModel : ViewModelBase
     }
 
     public ICommand OpenVideoPanelCommand { get; }
-    public ICommand PersonCommand { get; }
     public ICommand MainSettingsCommand { get; }
     
     public bool IsVideoPanelSelected => CurrentView is MainVideoPanelViewModel;
@@ -26,14 +25,12 @@ public class MainWindowViewModel : ViewModelBase
     public MainWindowViewModel()
     {
         OpenVideoPanelCommand = ReactiveCommand.Create(VideoPanel);
-        PersonCommand = ReactiveCommand.Create(Person);
         MainSettingsCommand = ReactiveCommand.Create(MainSettings);
 
         CurrentView = new MainVideoPanelViewModel();
     }
     
     private void VideoPanel() => CurrentView = new MainVideoPanelViewModel();
-    private void Person() => CurrentView = new PersonViewModel();
     private void MainSettings() => CurrentView = new MainSettingsViewModel();
 
     private void RaiseProperties()
