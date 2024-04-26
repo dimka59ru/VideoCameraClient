@@ -22,7 +22,7 @@ public class MainVideoPanelViewModel : ViewModelBase
         set => this.RaiseAndSetIfChanged(ref _rowCount, value);
     }
     
-    public ObservableCollection<int> Items { get; } = [];
+    public ObservableCollection<VideoCellViewModel> Items { get; } = [];
     public ReactiveCommand<string, Unit> OpenVideoPanelCommand { get; }
 
     public MainVideoPanelViewModel()
@@ -35,6 +35,9 @@ public class MainVideoPanelViewModel : ViewModelBase
     {
         switch (countCells)
         {
+            case "one":
+                UpdateVideoPanel(1);
+                break;
             case "four":
                 UpdateVideoPanel(4);
                 break;
@@ -60,15 +63,15 @@ public class MainVideoPanelViewModel : ViewModelBase
 
         var requiredCells = RowCount * ColumnCount;
         var currentCountCells = Items.Count;
-        var addCell = requiredCells - currentCountCells;
         
         for (var i = currentCountCells; i <= requiredCells; i++)
         {
-            Items.Add(i);
+            var videoCell = new VideoCellViewModel(i+1);
+            Items.Add(videoCell);
         }
         for (var i = currentCountCells; i >= requiredCells; i--)
         {
-            Items.Remove(i);
+            Items.RemoveAt(i);
         }
     }
 }

@@ -18,7 +18,9 @@
                     Height="50"
                     Orientation="Horizontal"
                     HorizontalAlignment="Center">
-            <!-- <Rectangle  Fill="Brown"/> -->
+            <views:GridButton RowCount="1" ColumnCount="1"
+                              Command="{Binding OpenVideoPanelCommand}"
+                              CommandParameter="one"/>
             <views:GridButton RowCount="2" ColumnCount="2"
                               Command="{Binding OpenVideoPanelCommand}"
                               CommandParameter="four"/>
@@ -49,8 +51,9 @@
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <Border BorderBrush="White" 
-                                BorderThickness="1"
-                        ></Border>
+                                BorderThickness="1">
+                            <views:VideoCellView></views:VideoCellView>
+                        </Border>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
