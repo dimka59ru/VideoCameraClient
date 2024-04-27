@@ -1,5 +1,6 @@
 using System;
-using System.Threading.Tasks;
+using System.Reactive.Linq;
+using Avalonia.Media;
 
 namespace App.VideoSources;
 public class RandomImagesVideoSource : IVideoSource
@@ -10,28 +11,41 @@ public class RandomImagesVideoSource : IVideoSource
     private const int ImageHeight = 1080;
     
     private readonly byte[] _bgraPixelData = new byte[ImageWidth * ImageHeight * 4];
+    
+    //And to stop the timer when not needed:
+    //subscription.Dispose();
+    
     public RandomImagesVideoSource()
     {
-        Task.Run(async () =>
-        {
-            while (true)
-            {
-                var rand = new Random();
-
-                for (var i = 0; i < _bgraPixelData.Length; i+=4)
+        var subscription =
+            Observable
+                .Interval(TimeSpan.FromMilliseconds(40))
+                .Subscribe(x =>
                 {
-                    _bgraPixelData[i] = (byte)rand.Next(0, 255);   //B
-                    _bgraPixelData[i+1] = (byte)rand.Next(0, 255); //G
-                    _bgraPixelData[i+2] = (byte)rand.Next(0, 255); //R
-                    _bgraPixelData[i+3] = 255;                     //A
-                }
-                
-                var frame = new DecodedVideoFrame(_bgraPixelData, ImageWidth, ImageHeight);
-                
-                FrameReceived?.Invoke(this, frame);
+                    var frame = GetFrame();
+                    FrameReceived?.Invoke(this, frame);
+                });
+    }
 
-                await Task.Delay(50);
-            }
-        });
+    private IDecodedVideoFrame GetFrame()
+    {
+        var rand = new Random();
+        Color c = Color.FromArgb(
+            (byte)rand.Next(0, 255),
+            (byte)rand.Next(0, 255), 
+            (byte)rand.Next(0, 255), 
+            (byte)rand.Next(0, 255));
+        
+        for (var i = 0; i < _bgraPixelData.Length; i+=4)
+        {
+            _bgraPixelData[i] = c.B;     //B
+            _bgraPixelData[i + 1] = c.G; //G
+            _bgraPixelData[i + 2] = c.R; //R
+            _bgraPixelData[i + 3] = c.A; //A
+        }
+        
+        var span = new ReadOnlySpan<byte>(_bgraPixelData);
+        //rand.NextBytes(_bgraPixelData);
+        return  new DecodedVideoFrame(_bgraPixelData, ImageWidth, ImageHeight);
     }
 }

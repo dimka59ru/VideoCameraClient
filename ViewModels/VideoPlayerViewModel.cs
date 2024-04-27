@@ -44,8 +44,24 @@ public class VideoPlayerViewModel : ViewModelBase, IDisposable
             dpi,
             PixelFormat.Bgra8888,
             AlphaFormat.Premul);
-
+        
         using var frameBuffer = bitmap.Lock();
+        // 1 way
+         // unsafe
+         // {
+         //     var ptr = (uint*)frameBuffer.Address;
+         //     for(var x=0; x < frameBuffer.Size.Width; x++)
+         //     for (var y = 0; y < frameBuffer.Size.Height; y++)
+         //     {
+         //         uint pixel = bgraPixelData[y * frameBuffer.RowBytes + x * 4 + 2]
+         //                      | (uint)(bgraPixelData[y * frameBuffer.RowBytes + x * 4 + 1] << 8)
+         //                      | (uint)(bgraPixelData[y * frameBuffer.RowBytes + x * 4 + 0] << 16)
+         //                      | (uint)(bgraPixelData[y * frameBuffer.RowBytes + x * 4  + 3] << 24);
+         //         ptr[y * frameBuffer.RowBytes / 4 + x] = pixel;
+         //     }
+         // }
+        
+        // 2 way
         Marshal.Copy(bgraPixelData, 0, frameBuffer.Address, bgraPixelData.Length);
 
         return bitmap;

@@ -11,7 +11,8 @@ public class VideoCellViewModel : ViewModelBase, IDisposable
     public VideoCellViewModel(int index, IVideoSource videoSource)
     {
         Index = index;
-        VideoPlayerViewModel = new VideoPlayerViewModel(videoSource);
+        var vs = new RandomImagesVideoSource();
+        VideoPlayerViewModel = new VideoPlayerViewModel(vs);
     }
 
     public void Dispose()
