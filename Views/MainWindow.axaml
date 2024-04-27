@@ -44,6 +44,8 @@
                         <Setter Property="Height" Value="40"></Setter>
                         <Setter Property="Foreground" Value="White"></Setter>
                         <Setter Property="Padding" Value="5 0 0 0"></Setter>
+                        <Setter Property="IconHeight" Value="30"></Setter>
+                        <Setter Property="IconWidth" Value="30"></Setter>
                     </Style>
                     <Style Selector="views|IconButton.IsVideoPanel, 
                                      views|IconButton.IsMainSettings">

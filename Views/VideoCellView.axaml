@@ -8,11 +8,12 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="App.Views.VideoCellView">
 
-    <Grid RowDefinitions="20, *">
+    <Grid>
         <Label Grid.Row="0" 
+               Height="20"
                Content="{Binding Index}"
-               VerticalAlignment="Center"/>
-        <views:VideoPlayerView Grid.Row="1" 
+               VerticalAlignment="Top"/>
+        <views:VideoPlayerView Grid.Row="0" 
                                DataContext="{Binding VideoPlayerViewModel}"/>
         
     </Grid>

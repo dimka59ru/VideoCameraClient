@@ -11,6 +11,8 @@
         <Setter Property="BorderThickness" Value="2 0 0 0"></Setter>
         <Setter Property="BorderBrush" Value="Transparent"></Setter>
         <Setter Property="Foreground" Value="White"></Setter>
+        <Setter Property="IconHeight" Value="20"></Setter>
+        <Setter Property="IconWidth" Value="20"></Setter>
         <Setter Property="Template">
             <ControlTemplate>
                 <Button Width="{TemplateBinding Width}"
@@ -21,11 +23,14 @@
                     <Border BorderThickness="{TemplateBinding BorderThickness}"
                             BorderBrush="{TemplateBinding BorderBrush}"
                             Padding="{TemplateBinding Padding}">
-                        <StackPanel Orientation="Horizontal" >
-                            <PathIcon Data="{TemplateBinding PathIcon}"
-                                      Foreground="{TemplateBinding Foreground}" 
-                                      VerticalAlignment="Center"
-                                      Margin="0 0 5 0"/>
+                        <StackPanel Orientation="Horizontal">
+                            <Viewbox Height="{TemplateBinding IconHeight}" 
+                                     Width="{TemplateBinding IconWidth}">
+                                <PathIcon Data="{TemplateBinding PathIcon}"
+                                          Foreground="{TemplateBinding Foreground}" 
+                                          VerticalAlignment="Center"
+                                          Margin="0 0 5 0"/>
+                            </Viewbox>
                             <TextBlock Foreground="{TemplateBinding Foreground}"
                                        VerticalAlignment="Center"
                                        Text="{TemplateBinding Text}"/> 
