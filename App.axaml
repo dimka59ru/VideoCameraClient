@@ -18,6 +18,7 @@
         </ResourceDictionary>
         
         <SolidColorBrush x:Key="BlueCharcoalBrush">#212529</SolidColorBrush>
+        <SolidColorBrush x:Key="DarkGreyBrush">#444444</SolidColorBrush>
     </Application.Resources>
 
     <Application.Styles>

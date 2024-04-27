@@ -3,6 +3,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="using:App.ViewModels"
+             xmlns:views="clr-namespace:App.Views"
              x:DataType="vm:VideoPlayerViewModel"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="App.Views.VideoPlayerView">
@@ -15,9 +16,25 @@
         </Grid>
         
         <Grid Grid.Row="1">
-            <StackPanel Orientation="Horizontal" Height="40">
-                <Button>Start</Button>
-                <Button>Stop</Button>
+            <StackPanel Orientation="Horizontal" 
+                        Height="34"
+                        HorizontalAlignment="Center">
+                <StackPanel.Styles>
+                    <Style Selector="views|IconButton /template/ PathIcon:disabled">
+                        <Setter Property="Foreground" Value="Gray"></Setter>
+                    </Style>
+                    <Style Selector="views|IconButton">
+                        <Setter Property="Background" Value="{StaticResource DarkGreyBrush}"></Setter>
+                    </Style>
+                </StackPanel.Styles>
+                <views:IconButton PathIcon="{StaticResource play_regular}"
+                                  Command="{Binding StartCommand, Mode=OneTime}"
+                                  Padding="13 5 8 5"
+                                  Margin="0 0 4 0"
+                                  HorizontalAlignment="Right"/>
+                <views:IconButton PathIcon="{StaticResource stop_regular}"
+                                  Command="{Binding StopCommand, Mode=OneTime}"
+                                  Padding="13 5 10 5"/>
             </StackPanel>
         </Grid>
         

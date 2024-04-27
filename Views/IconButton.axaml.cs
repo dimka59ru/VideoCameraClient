@@ -17,7 +17,7 @@ public class IconButton : TemplatedControl
     }
 
     public static readonly StyledProperty<string> TextProperty = AvaloniaProperty.Register<IconButton, string>(
-        nameof(Text), "Button");
+        nameof(Text), "");
 
     public string Text
     {

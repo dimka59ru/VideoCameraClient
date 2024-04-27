@@ -1,14 +1,12 @@
 using System;
 using System.Collections.ObjectModel;
 using System.Reactive;
-using App.VideoSources;
 using ReactiveUI;
 
 namespace App.ViewModels;
 
 public class MainVideoPanelViewModel : ViewModelBase, IDisposable
 {
-    private readonly IVideoSource _videoSource;
     private int _columnCount;
     private int _rowCount;
     
@@ -29,9 +27,8 @@ public class MainVideoPanelViewModel : ViewModelBase, IDisposable
 
     
     
-    public MainVideoPanelViewModel(IVideoSource videoSource)
+    public MainVideoPanelViewModel()
     {
-        _videoSource = videoSource ?? throw new ArgumentNullException(nameof(videoSource));
         OpenVideoPanelCommand = ReactiveCommand.Create<string>(OpenVideoPanel);
         UpdateVideoPanel(4);
     }
@@ -71,7 +68,7 @@ public class MainVideoPanelViewModel : ViewModelBase, IDisposable
         
         for (var i = currentCountCells; i < requiredCells; i++)
         {
-            var videoCell = new VideoCellViewModel(i+1, _videoSource);
+            var videoCell = new VideoCellViewModel(i+1);
             Items.Add(videoCell);
         }
         for (var i = currentCountCells; i > requiredCells; i--)

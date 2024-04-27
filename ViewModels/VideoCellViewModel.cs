@@ -8,7 +8,7 @@ public class VideoCellViewModel : ViewModelBase, IDisposable
     public int Index { get; }
     public VideoPlayerViewModel VideoPlayerViewModel { get; }
     
-    public VideoCellViewModel(int index, IVideoSource videoSource)
+    public VideoCellViewModel(int index)
     {
         Index = index;
         var vs = new RandomImagesVideoSource();

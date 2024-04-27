@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Windows.Input;
-using App.VideoSources;
 using ReactiveUI;
 
 namespace App.ViewModels;
@@ -26,20 +25,17 @@ public class MainWindowViewModel : ViewModelBase
     public bool IsVideoPanelSelected => CurrentView is MainVideoPanelViewModel;
     public bool IsMainSettingSelected => CurrentView is MainSettingsViewModel;
 
-    private IVideoSource VideoSource { get; }
-
     public MainWindowViewModel()
     {
         OpenVideoPanelCommand = ReactiveCommand.Create(VideoPanel);
         MainSettingsCommand = ReactiveCommand.Create(MainSettings);
-
-        VideoSource = new RandomImagesVideoSource();
-        CurrentView = new MainVideoPanelViewModel(VideoSource);
+        
+        CurrentView = new MainVideoPanelViewModel();
     }
     
     private void VideoPanel()
     {
-        CurrentView = new MainVideoPanelViewModel(VideoSource);
+        CurrentView = new MainVideoPanelViewModel();
     }
 
     private void MainSettings()

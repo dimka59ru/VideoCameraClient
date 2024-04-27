@@ -6,18 +6,17 @@ namespace App.VideoSources;
 public class RandomImagesVideoSource : IVideoSource
 {
     public event EventHandler<IDecodedVideoFrame>? FrameReceived;
-    
+
     private const int ImageWidth = 1920;
     private const int ImageHeight = 1080;
     
     private readonly byte[] _bgraPixelData = new byte[ImageWidth * ImageHeight * 4];
+    private IDisposable? _subscription;
     
-    //And to stop the timer when not needed:
-    //subscription.Dispose();
-    
-    public RandomImagesVideoSource()
+    public void Start()
     {
-        var subscription =
+        Stop();
+        _subscription =
             Observable
                 .Interval(TimeSpan.FromMilliseconds(40))
                 .Subscribe(x =>
@@ -25,9 +24,19 @@ public class RandomImagesVideoSource : IVideoSource
                     var frame = GetFrame();
                     FrameReceived?.Invoke(this, frame);
                 });
+        
+        Console.WriteLine("Source Started");
+        
+       
     }
 
-    private IDecodedVideoFrame GetFrame()
+    public void Stop()
+    {
+        _subscription?.Dispose();
+        Console.WriteLine("Source Stopped");
+    }
+
+    private DecodedVideoFrame GetFrame()
     {
         var rand = new Random();
         Color c = Color.FromArgb(
@@ -43,8 +52,6 @@ public class RandomImagesVideoSource : IVideoSource
             _bgraPixelData[i + 2] = c.R; //R
             _bgraPixelData[i + 3] = c.A; //A
         }
-        
-        var span = new ReadOnlySpan<byte>(_bgraPixelData);
         //rand.NextBytes(_bgraPixelData);
         return  new DecodedVideoFrame(_bgraPixelData, ImageWidth, ImageHeight);
     }

@@ -36,7 +36,7 @@
         <Grid ColumnDefinitions="Auto, *">
 
             <!-- Left menu -->
-            <Grid Background="#444444" 
+            <Grid Background="{StaticResource DarkGreyBrush}" 
                   HorizontalAlignment="Left">
                 <Grid.Styles>
                     <Style Selector="views|IconButton">

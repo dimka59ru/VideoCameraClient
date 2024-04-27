@@ -10,7 +10,7 @@
         <Setter Property="PathIcon" Value="{StaticResource drink_coffee_regular}"></Setter>
         <Setter Property="BorderThickness" Value="2 0 0 0"></Setter>
         <Setter Property="BorderBrush" Value="Transparent"></Setter>
-        <Setter Property="Foreground" Value="Wheat"></Setter>
+        <Setter Property="Foreground" Value="White"></Setter>
         <Setter Property="Template">
             <ControlTemplate>
                 <Button Width="{TemplateBinding Width}"

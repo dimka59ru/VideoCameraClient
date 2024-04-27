@@ -1,6 +1,6 @@
 using System;
 using System.Runtime.InteropServices;
-using App.Services;
+using System.Windows.Input;
 using App.VideoSources;
 using Avalonia;
 using Avalonia.Media.Imaging;
@@ -12,7 +12,14 @@ namespace App.ViewModels;
 public class VideoPlayerViewModel : ViewModelBase, IDisposable
 {
     private readonly IVideoSource _videoSource;
-    public IVideoPlayer VideoPlayer { get; }
+    
+    private bool _started;
+
+    private bool Started 
+    {
+        get => _started;
+        set => this.RaiseAndSetIfChanged(ref _started, value);
+    }
 
     private WriteableBitmap? _frameImage;
     public WriteableBitmap? FrameImage
@@ -21,14 +28,37 @@ public class VideoPlayerViewModel : ViewModelBase, IDisposable
         private set => this.RaiseAndSetIfChanged(ref _frameImage, value);
     }
     
+    public ICommand StartCommand { get; }
+    private IObservable<bool> StartCommandCanExecute =>
+        this.WhenAnyValue(x => x.Started, started => !started);
+        
+    public ICommand StopCommand { get; }
+    private IObservable<bool> StopCommandCanExecute => 
+        this.WhenAnyValue(x => x.Started);
+    
+    
     public VideoPlayerViewModel(IVideoSource videoSource)
     {
         _videoSource = videoSource ?? throw new ArgumentNullException(nameof(videoSource));
-        VideoPlayer = new VideoPlayer(videoSource);
-        VideoPlayer.Start();
+        StartCommand = ReactiveCommand.Create(Start, StartCommandCanExecute);
+        StopCommand = ReactiveCommand.Create(Stop, StopCommandCanExecute);
+        
         _videoSource.FrameReceived += OnFrameReceived;
+        Start();
+    }
+
+    private void Start()
+    {
+        _videoSource.Start();
+        Started = true;
     }
     
+    private void Stop()
+    {
+        _videoSource.Stop();
+        Started = false;
+    }
+
     private void OnFrameReceived(object? sender, IDecodedVideoFrame e)
     {
         FrameImage = CreateBitmapFromPixelData(e.BgraPixelData, e.Width, e.Height);
@@ -69,7 +99,7 @@ public class VideoPlayerViewModel : ViewModelBase, IDisposable
     
     public void Dispose()
     {
-        VideoPlayer.Dispose();
+        Stop();
         _videoSource.FrameReceived -= OnFrameReceived;
     }
 }
