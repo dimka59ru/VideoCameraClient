@@ -9,7 +9,7 @@ using ReactiveUI;
 
 namespace App.ViewModels;
 
-public class VideoPlayerViewModel : ViewModelBase, IDisposable
+public class VideoPlayerViewModel : ViewModelBase, IObserver<IDecodedVideoFrame>, IDisposable
 {
     private readonly IVideoSource _videoSource;
     
@@ -37,13 +37,15 @@ public class VideoPlayerViewModel : ViewModelBase, IDisposable
         this.WhenAnyValue(x => x.Started);
     
     
+    private readonly IDisposable _subscription;
+    
     public VideoPlayerViewModel(IVideoSource videoSource)
     {
         _videoSource = videoSource ?? throw new ArgumentNullException(nameof(videoSource));
         StartCommand = ReactiveCommand.Create(Start, StartCommandCanExecute);
         StopCommand = ReactiveCommand.Create(Stop, StopCommandCanExecute);
         
-        _videoSource.FrameReceived += OnFrameReceived;
+        _subscription =  videoSource.Subscribe(this);
         Start();
     }
 
@@ -100,6 +102,21 @@ public class VideoPlayerViewModel : ViewModelBase, IDisposable
     public void Dispose()
     {
         Stop();
-        _videoSource.FrameReceived -= OnFrameReceived;
+        _subscription.Dispose();
+    }
+
+    public void OnCompleted()
+    {
+        throw new NotImplementedException();
+    }
+
+    public void OnError(Exception error)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void OnNext(IDecodedVideoFrame frame)
+    {
+        FrameImage = CreateBitmapFromPixelData(frame.BgraPixelData, frame.Width, frame.Height);
     }
 }

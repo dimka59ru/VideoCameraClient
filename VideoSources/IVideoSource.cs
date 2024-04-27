@@ -2,10 +2,8 @@ using System;
 
 namespace App.VideoSources;
 
-public interface IVideoSource
+public interface IVideoSource : IObservable<IDecodedVideoFrame>
 {
-    event EventHandler<IDecodedVideoFrame> FrameReceived;
-
     void Start();
     void Stop();
 }

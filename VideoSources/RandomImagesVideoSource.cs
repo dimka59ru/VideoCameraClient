@@ -1,18 +1,20 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Reactive.Linq;
+using App.Models;
 using Avalonia.Media;
 
 namespace App.VideoSources;
 public class RandomImagesVideoSource : IVideoSource
 {
-    public event EventHandler<IDecodedVideoFrame>? FrameReceived;
-
-    private const int ImageWidth = 1920;
-    private const int ImageHeight = 1080;
+    private const int ImageWidth = 300;
+    private const int ImageHeight = 200;
     
     private readonly byte[] _bgraPixelData = new byte[ImageWidth * ImageHeight * 4];
     private IDisposable? _subscription;
-    
+    private readonly List<IObserver<IDecodedVideoFrame>> _frameObservers = [];
+
     public void Start()
     {
         Stop();
@@ -22,12 +24,13 @@ public class RandomImagesVideoSource : IVideoSource
                 .Subscribe(x =>
                 {
                     var frame = GetFrame();
-                    FrameReceived?.Invoke(this, frame);
+                     foreach (var observer in _frameObservers.ToList()) // https://stackoverflow.com/a/604843/6128692
+                     {
+                         observer.OnNext(frame);
+                     }
                 });
         
         Console.WriteLine("Source Started");
-        
-       
     }
 
     public void Stop()
@@ -39,7 +42,7 @@ public class RandomImagesVideoSource : IVideoSource
     private DecodedVideoFrame GetFrame()
     {
         var rand = new Random();
-        Color c = Color.FromArgb(
+        var c = Color.FromArgb(
             (byte)rand.Next(0, 255),
             (byte)rand.Next(0, 255), 
             (byte)rand.Next(0, 255), 
@@ -54,5 +57,11 @@ public class RandomImagesVideoSource : IVideoSource
         }
         //rand.NextBytes(_bgraPixelData);
         return  new DecodedVideoFrame(_bgraPixelData, ImageWidth, ImageHeight);
+    }
+
+    public IDisposable Subscribe(IObserver<IDecodedVideoFrame> observer)
+    {
+        _frameObservers.Add(observer);
+        return new Unsubscriber<IDecodedVideoFrame>(_frameObservers, observer);
     }
 }
