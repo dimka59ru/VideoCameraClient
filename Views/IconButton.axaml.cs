@@ -51,4 +51,12 @@ public class IconButton : TemplatedControl
         get => GetValue(IconHeightProperty);
         set => SetValue(IconHeightProperty, value);
     }
+    
+    public static readonly StyledProperty<object> CommandParameterProperty = AvaloniaProperty.Register<GridButton, object>(
+        "CommandParameter");
+    public object CommandParameter
+    {
+        get => GetValue(CommandParameterProperty);
+        set => SetValue(CommandParameterProperty, value);
+    }
 }

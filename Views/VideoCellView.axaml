@@ -9,10 +9,6 @@
              x:Class="App.Views.VideoCellView">
 
     <Grid>
-        <Label Grid.Row="0" 
-               Height="20"
-               Content="{Binding Index}"
-               VerticalAlignment="Top"/>
         <views:VideoPlayerView Grid.Row="0" 
                                DataContext="{Binding VideoPlayerViewModel}"/>
         

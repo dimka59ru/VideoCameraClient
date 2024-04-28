@@ -31,11 +31,11 @@
                         </Style>
                     </StackPanel.Styles>
                     <views:IconButton PathIcon="{StaticResource play_regular}"
-                                      Command="{Binding StartCommand, Mode=OneTime}"
+                                      Command="{Binding StartCommand}"
                                       Padding="13 2 8 2"
                                       Margin="5 0 4 0"/>
                     <views:IconButton PathIcon="{StaticResource stop_regular}"
-                                      Command="{Binding StopCommand, Mode=OneTime}"
+                                      Command="{Binding StopCommand}"
                                       Padding="13 2 10 2"
                                       Margin="0 0 5 0"/>
                 </StackPanel>

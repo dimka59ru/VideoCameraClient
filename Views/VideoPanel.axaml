@@ -7,10 +7,6 @@
              x:DataType="vm:MainVideoPanelViewModel"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="App.Views.VideoPanel">
-    <Design.DataContext>
-        <vm:MainVideoPanelViewModel/>
-    </Design.DataContext>
-    
     <Grid RowDefinitions="Auto, *">
         
         <!-- Select Panel Buttons -->
@@ -36,7 +32,8 @@
         </StackPanel>
         
         <!-- Video Panel-->
-        <Grid Grid.Row="1">
+        <Grid Grid.Row="1"
+              IsVisible="{Binding VideoCellMaximized, Converter={x:Static ObjectConverters.IsNull}}">
             <ItemsControl ItemsSource="{Binding Items}">
 
                 <!-- This panel will be used to hold the items -->
@@ -52,12 +49,81 @@
                     <DataTemplate>
                         <Border BorderBrush="White" 
                                 BorderThickness="1">
-                            <views:VideoCellView></views:VideoCellView>
+                            <Grid>
+                                <views:VideoCellView></views:VideoCellView>
+                                <Grid>
+                                    <StackPanel HorizontalAlignment="Left"
+                                                VerticalAlignment="Top" >
+                                        <Border Background="#DD444444"
+                                                CornerRadius="0 0 5 0"
+                                                Height="23"
+                                                Width="23">
+                                            <StackPanel>
+                                                <Label Grid.Row="0"
+                                                       Height="20"
+                                                       Content="{Binding Index}"/>
+                                            </StackPanel>
+                                        </Border>
+                                    </StackPanel>
+                                    <StackPanel HorizontalAlignment="Right"
+                                                VerticalAlignment="Top" >
+                                        <Border Background="#DD444444"
+                                                CornerRadius="0 0 0 5"
+                                                Height="23">
+                                            <StackPanel>
+                                                <views:IconButton PathIcon="{StaticResource arrow_maximize_regular}"
+                                                                  Command="{Binding $parent[UserControl].((vm:MainVideoPanelViewModel)DataContext).MaximizeMinimizeCellCommand}"
+                                                                  CommandParameter="{Binding .}">
+                                                </views:IconButton>
+                                            </StackPanel>
+                                        </Border>
+                                    </StackPanel>
+                                </Grid>
+                            </Grid>
                         </Border>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
         </Grid>
         
-    </Grid>
+        <Grid Grid.Row="1"
+              IsVisible="{Binding VideoCellMaximized, Converter={x:Static ObjectConverters.IsNotNull}}">
+            <Border BorderBrush="White" 
+                    BorderThickness="1">
+                <Grid>
+                    <views:VideoCellView DataContext="{Binding VideoCellMaximized}"
+                                         Name="VideoCellView"/>
+                    <Grid>
+                        <StackPanel HorizontalAlignment="Left"
+                                    VerticalAlignment="Top" >
+                            <Border Background="#DD444444"
+                                    CornerRadius="0 0 5 0"
+                                    Height="23"
+                                    Width="23">
+                                <StackPanel>
+                                    <Label Grid.Row="0"
+                                           Height="20"
+                                           Content="{Binding #VideoCellView.((vm:VideoCellViewModel)DataContext).Index}"/>
+                                </StackPanel>
+                            </Border>
+                        </StackPanel>
+                        <StackPanel HorizontalAlignment="Right"
+                                    VerticalAlignment="Top" >
+                            <Border Background="#DD444444"
+                                    CornerRadius="0 0 0 5"
+                                    Height="23">
+                                <StackPanel>
+                                    <views:IconButton PathIcon="{StaticResource arrow_minimize_regular}"
+                                                      Command="{Binding $parent[UserControl].((vm:MainVideoPanelViewModel)DataContext).MaximizeMinimizeCellCommand}"
+                                                      CommandParameter="{x:Null}">
+                                    </views:IconButton>
+                                </StackPanel>
+                            </Border>
+                        </StackPanel>
+                    </Grid>
+                </Grid>
+            </Border>
+        </Grid>
+        
+        </Grid>
 </UserControl>

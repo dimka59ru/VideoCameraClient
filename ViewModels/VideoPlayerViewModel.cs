@@ -13,6 +13,7 @@ public class VideoPlayerViewModel : ViewModelBase, IObserver<IDecodedVideoFrame>
 {
     private readonly IVideoSource _videoSource;
     
+
     private bool _started;
 
     private bool Started 
@@ -42,6 +43,7 @@ public class VideoPlayerViewModel : ViewModelBase, IObserver<IDecodedVideoFrame>
     public VideoPlayerViewModel(IVideoSource videoSource)
     {
         _videoSource = videoSource ?? throw new ArgumentNullException(nameof(videoSource));
+        
         StartCommand = ReactiveCommand.Create(Start, StartCommandCanExecute);
         StopCommand = ReactiveCommand.Create(Stop, StopCommandCanExecute);
         

@@ -18,6 +18,7 @@
                 <Button Width="{TemplateBinding Width}"
                         Height="{TemplateBinding Width}"
                         Command="{TemplateBinding Command}"
+                        CommandParameter="{TemplateBinding CommandParameter}"
                         Background="{TemplateBinding Background}"
                         Padding="0">
                     <Border BorderThickness="{TemplateBinding BorderThickness}"

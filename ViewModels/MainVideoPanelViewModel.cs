@@ -9,6 +9,7 @@ public class MainVideoPanelViewModel : ViewModelBase, IDisposable
 {
     private int _columnCount;
     private int _rowCount;
+    private VideoCellViewModel? _videoCellMaximized;
     
     public int ColumnCount
     {
@@ -22,15 +23,28 @@ public class MainVideoPanelViewModel : ViewModelBase, IDisposable
         set => this.RaiseAndSetIfChanged(ref _rowCount, value);
     }
     
+    public VideoCellViewModel? VideoCellMaximized
+    {
+        get => _videoCellMaximized;
+        set => this.RaiseAndSetIfChanged(ref _videoCellMaximized, value);
+    }
+    
     public ObservableCollection<VideoCellViewModel> Items { get; } = [];
     public ReactiveCommand<string, Unit> OpenVideoPanelCommand { get; }
-
     
+    public ReactiveCommand<VideoCellViewModel, Unit> MaximizeMinimizeCellCommand { get; }
     
     public MainVideoPanelViewModel()
     {
         OpenVideoPanelCommand = ReactiveCommand.Create<string>(OpenVideoPanel);
+        MaximizeMinimizeCellCommand = ReactiveCommand.Create<VideoCellViewModel>(MaximizeMinimizeCell);
         UpdateVideoPanel(4);
+    }
+
+    private void MaximizeMinimizeCell(VideoCellViewModel videoCell)
+    {
+        VideoCellMaximized = videoCell;
+        // TODO Нужно по хорошему остоановить остальные ячейки.
     }
 
     private void OpenVideoPanel(string countCells)
@@ -68,7 +82,7 @@ public class MainVideoPanelViewModel : ViewModelBase, IDisposable
         
         for (var i = currentCountCells; i < requiredCells; i++)
         {
-            var videoCell = new VideoCellViewModel(i+1);
+            var videoCell = new VideoCellViewModel(i + 1);
             Items.Add(videoCell);
         }
         for (var i = currentCountCells; i > requiredCells; i--)
