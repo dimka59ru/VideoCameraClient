@@ -31,8 +31,8 @@ public class MainVideoPanelViewModel : ViewModelBase, IDisposable
     
     public ObservableCollection<VideoCellViewModel> Items { get; } = [];
     public ReactiveCommand<string, Unit> OpenVideoPanelCommand { get; }
-    
     public ReactiveCommand<VideoCellViewModel, Unit> MaximizeMinimizeCellCommand { get; }
+
     
     public MainVideoPanelViewModel()
     {
@@ -43,8 +43,8 @@ public class MainVideoPanelViewModel : ViewModelBase, IDisposable
 
     private void MaximizeMinimizeCell(VideoCellViewModel videoCell)
     {
-        VideoCellMaximized = videoCell;
-        // TODO Нужно по хорошему остоановить остальные ячейки.
+        VideoCellMaximized = VideoCellMaximized == null ? videoCell : null;
+        // TODO Нужно по хорошему остановить остальные ячейки.
     }
 
     private void OpenVideoPanel(string countCells)
