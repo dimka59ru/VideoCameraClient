@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Reactive;
 using ReactiveUI;
@@ -30,15 +31,15 @@ public class MainVideoPanelViewModel : ViewModelBase, IDisposable
     }
     
     public ObservableCollection<VideoCellViewModel> Items { get; } = [];
-    public ReactiveCommand<string, Unit> OpenVideoPanelCommand { get; }
+    public ReactiveCommand<List<int>, Unit> OpenVideoPanelCommand { get; }
     public ReactiveCommand<VideoCellViewModel, Unit> MaximizeMinimizeCellCommand { get; }
 
     
     public MainVideoPanelViewModel()
     {
-        OpenVideoPanelCommand = ReactiveCommand.Create<string>(OpenVideoPanel);
+        OpenVideoPanelCommand = ReactiveCommand.Create<List<int>>(UpdateVideoPanel);
         MaximizeMinimizeCellCommand = ReactiveCommand.Create<VideoCellViewModel>(MaximizeMinimizeCell);
-        UpdateVideoPanel(4);
+        UpdateVideoPanel([2, 2]);
     }
 
     private void MaximizeMinimizeCell(VideoCellViewModel videoCell)
@@ -47,36 +48,18 @@ public class MainVideoPanelViewModel : ViewModelBase, IDisposable
         // TODO Нужно по хорошему остановить остальные ячейки.
     }
 
-    private void OpenVideoPanel(string countCells)
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="panelParams">first: rows, second: columns</param>
+    private void UpdateVideoPanel(List<int> panelParams)
     {
-        switch (countCells)
-        {
-            case "one":
-                UpdateVideoPanel(1);
-                break;
-            case "four":
-                UpdateVideoPanel(4);
-                break;
-            case "nine":
-                UpdateVideoPanel(9);
-                break;
-            case "sixteen":
-                UpdateVideoPanel(16);
-                break;
-            case "twenty_five":
-                UpdateVideoPanel(25);
-                break;
-            default:
-                UpdateVideoPanel(4);
-                break;
-        }
-    }
-
-    private void UpdateVideoPanel(int countCells)
-    {
-        RowCount = (int)Math.Sqrt(countCells);
-        ColumnCount = (int)Math.Sqrt(countCells);
-
+        if (panelParams.Count != 2 )
+            throw new ArgumentException("incorrect number of parameters");
+        
+        RowCount = panelParams[0];
+        ColumnCount = panelParams[1];
+        
         var requiredCells = RowCount * ColumnCount;
         var currentCountCells = Items.Count;
         

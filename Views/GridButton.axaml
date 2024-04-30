@@ -9,7 +9,7 @@
     <Button Margin="0" Padding="0" CornerRadius="0"
             Background="Transparent"
             Command="{Binding ElementName=Root, Path=Command}"
-            CommandParameter="{Binding ElementName=Root, Path=CommandParameter}"
+            CommandParameter="{Binding ElementName=Root, Path=ButtonParams}"
             Width="40"
             Height="40">
         <Grid>

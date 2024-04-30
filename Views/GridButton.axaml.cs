@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 using Avalonia;
@@ -26,6 +27,9 @@ public partial class GridButton : UserControl
     }
     
     public ObservableCollection<int> Items { get; } = [];
+
+    //first: rows, second: columns
+    public List<int> ButtonParams { get; } = [];
     
     public static readonly StyledProperty<ICommand> CommandProperty = AvaloniaProperty.Register<GridButton, ICommand>(
         "Command");
@@ -33,14 +37,6 @@ public partial class GridButton : UserControl
     {
         get => GetValue(CommandProperty);
         set => SetValue(CommandProperty, value);
-    }
-
-    public static readonly StyledProperty<object> CommandParameterProperty = AvaloniaProperty.Register<GridButton, object>(
-        "CommandParameter");
-    public object CommandParameter
-    {
-        get => GetValue(CommandParameterProperty);
-        set => SetValue(CommandParameterProperty, value);
     }
     
     public GridButton()
@@ -65,9 +61,14 @@ public partial class GridButton : UserControl
     {
         if (ColumnCount == 0 || RowCount == 0)
             return;
+            
         for (var i = 0; i < ColumnCount * RowCount; i++)
         {
             Items.Add(i);
         }
+        
+        ButtonParams.Clear();
+        ButtonParams.Add(RowCount);
+        ButtonParams.Add(ColumnCount);
     }
 }
