@@ -44,14 +44,10 @@
                                         
                                         <views:IconButton.Styles>
                                             <Style Selector="views|IconButton.IsMaximized">
-                                                <Style.Setters>
-                                                    <Setter Property="PathIcon" Value="{StaticResource arrow_minimize_regular}"/>
-                                                </Style.Setters>
+                                                <Setter Property="PathIcon" Value="{StaticResource arrow_minimize_regular}"/>
                                             </Style>
                                             <Style Selector="views|IconButton.NotMaximized">
-                                                <Style.Setters>
-                                                    <Setter Property="PathIcon" Value="{StaticResource arrow_maximize_regular}"/>
-                                                </Style.Setters>
+                                                <Setter Property="PathIcon" Value="{StaticResource arrow_maximize_regular}"/>
                                             </Style>
                                         </views:IconButton.Styles>
                                     </views:IconButton>
