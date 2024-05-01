@@ -6,11 +6,54 @@
              xmlns:views="using:App.Views"
              x:DataType="vm:VideoCellViewModel"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="App.Views.VideoCellView">
-
-    <Grid>
-        <views:VideoPlayerView Grid.Row="0" 
-                               DataContext="{Binding VideoPlayerViewModel}"/>
+             x:Class="App.Views.VideoCellView"
+             Name="Root">
+    <Border BorderBrush="White" 
+            BorderThickness="1">
+       <Grid>
+           
+            <views:VideoPlayerView DataContext="{Binding VideoPlayerViewModel}"/>
         
-    </Grid>
+            <!-- Top Bar -->
+            <Grid>
+                <StackPanel HorizontalAlignment="Left"
+                            VerticalAlignment="Top" >
+                    <Border Background="#DD444444"
+                            CornerRadius="0 0 5 0"
+                            Height="23"
+                            Width="23">
+                        <StackPanel>
+                            <Label Grid.Row="0"
+                                   Height="20"
+                                   Content="{Binding Index}"/>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+                <StackPanel HorizontalAlignment="Right"
+                            VerticalAlignment="Top" >
+                    <Border Background="#DD444444"
+                            CornerRadius="0 0 0 5"
+                            Height="23">
+                        <StackPanel>
+                            <views:IconButton 
+                                Command="{Binding #Root.MaximizeMinimizeCellCommand}"
+                                              CommandParameter="{Binding .}"
+                                              Classes.IsMaximized="{Binding  #Root.IsMaximized}"
+                                              Classes.NotMaximized="{Binding !#Root.IsMaximized}">
+                                <views:IconButton.Styles>
+                                    <Style Selector="views|IconButton.IsMaximized">
+                                        <Setter Property="PathIcon" Value="{StaticResource arrow_minimize_regular}"/>
+                                    </Style>
+                                    <Style Selector="views|IconButton.NotMaximized">
+                                        <Setter Property="PathIcon" Value="{StaticResource arrow_maximize_regular}"/>
+                                    </Style>
+                                </views:IconButton.Styles>
+                            </views:IconButton>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </Grid>
+            
+       </Grid>
+    </Border>
 </UserControl>

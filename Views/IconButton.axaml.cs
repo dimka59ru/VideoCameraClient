@@ -8,7 +8,7 @@ namespace App.Views;
 public class IconButton : TemplatedControl
 {
     public static readonly StyledProperty<ICommand> CommandProperty =
-        AvaloniaProperty.Register<IconButton, ICommand>(nameof(IconButton));
+        AvaloniaProperty.Register<IconButton, ICommand>(nameof(Command));
 
     public ICommand Command
     {
@@ -35,7 +35,7 @@ public class IconButton : TemplatedControl
     }
 
     public static readonly StyledProperty<double> IconWidthProperty = AvaloniaProperty.Register<IconButton, double>(
-        "IconWidth");
+        nameof(IconWidth));
 
     public double IconWidth
     {
@@ -44,7 +44,7 @@ public class IconButton : TemplatedControl
     }
 
     public static readonly StyledProperty<double> IconHeightProperty = AvaloniaProperty.Register<IconButton, double>(
-        "IconHeight");
+        nameof(IconHeight));
 
     public double IconHeight
     {
@@ -53,7 +53,7 @@ public class IconButton : TemplatedControl
     }
     
     public static readonly StyledProperty<object> CommandParameterProperty = AvaloniaProperty.Register<GridButton, object>(
-        "CommandParameter");
+        nameof(CommandParameter));
     public object CommandParameter
     {
         get => GetValue(CommandParameterProperty);

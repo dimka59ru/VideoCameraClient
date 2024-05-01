@@ -2,7 +2,6 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             
              xmlns:views="using:App.Views"
              xmlns:vm="using:App.ViewModels"
              x:DataType="vm:MainVideoPanelViewModel"
@@ -10,55 +9,13 @@
              x:Class="App.Views.VideoPanel">
     <UserControl.DataTemplates>
         <DataTemplate DataType="{x:Type vm:VideoCellViewModel}">
-            <Border BorderBrush="White" 
-                    BorderThickness="1">
-                <Grid>
-                    <views:VideoCellView></views:VideoCellView>
-                    <Grid>
-                        <StackPanel HorizontalAlignment="Left"
-                                    VerticalAlignment="Top" >
-                            <Border Background="#DD444444"
-                                    CornerRadius="0 0 5 0"
-                                    Height="23"
-                                    Width="23">
-                                <StackPanel>
-                                    <Label Grid.Row="0"
-                                           Height="20"
-                                           Content="{Binding Index}"/>
-                                </StackPanel>
-                            </Border>
-                        </StackPanel>
-                        <StackPanel HorizontalAlignment="Right"
-                                    VerticalAlignment="Top" >
-                            <Border Background="#DD444444"
-                                    CornerRadius="0 0 0 5"
-                                    Height="23">
-                                <StackPanel>
-                                    <views:IconButton 
-                                                      Command="{Binding $parent[UserControl].((vm:MainVideoPanelViewModel)DataContext).MaximizeMinimizeCellCommand}"
-                                                      CommandParameter="{Binding .}"
-                                                      Classes.IsMaximized="{Binding $parent[UserControl].((vm:MainVideoPanelViewModel)DataContext).VideoCellMaximized,
-                                                                            Converter={x:Static ObjectConverters.IsNotNull}}"
-                                                      Classes.NotMaximized="{Binding $parent[UserControl].((vm:MainVideoPanelViewModel)DataContext).VideoCellMaximized,
-                                                                            Converter={x:Static ObjectConverters.IsNull}}">
-                                        
-                                        <views:IconButton.Styles>
-                                            <Style Selector="views|IconButton.IsMaximized">
-                                                <Setter Property="PathIcon" Value="{StaticResource arrow_minimize_regular}"/>
-                                            </Style>
-                                            <Style Selector="views|IconButton.NotMaximized">
-                                                <Setter Property="PathIcon" Value="{StaticResource arrow_maximize_regular}"/>
-                                            </Style>
-                                        </views:IconButton.Styles>
-                                    </views:IconButton>
-                                </StackPanel>
-                            </Border>
-                        </StackPanel>
-                    </Grid>
-                </Grid>
-            </Border>
+            <views:VideoCellView
+                MaximizeMinimizeCellCommand="{Binding $parent[UserControl].((vm:MainVideoPanelViewModel)DataContext).MaximizeMinimizeCellCommand}"
+                IsMaximized="{Binding $parent[UserControl].((vm:MainVideoPanelViewModel)DataContext).VideoCellMaximized,
+                                Converter={x:Static ObjectConverters.IsNotNull}}"/>
         </DataTemplate>
     </UserControl.DataTemplates>
+    
     <Grid RowDefinitions="Auto, *">
         
         <!-- Select Panel Buttons -->
@@ -93,8 +50,6 @@
         <Grid Grid.Row="1"
               IsVisible="{Binding VideoCellMaximized, Converter={x:Static ObjectConverters.IsNull}}">
             <ItemsControl ItemsSource="{Binding Items}">
-
-                <!-- This panel will be used to hold the items -->
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <UniformGrid Rows="{Binding RowCount}" 
