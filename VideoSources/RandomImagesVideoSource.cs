@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
 using App.Models;
-using Avalonia.Media;
 
 namespace App.VideoSources;
 public class RandomImagesVideoSource : IVideoSource
@@ -38,6 +37,8 @@ public class RandomImagesVideoSource : IVideoSource
         _subscription?.Dispose();
         Console.WriteLine("Source Stopped");
     }
+
+    public bool IsAlive => true;
 
     private DecodedVideoFrame GetFrame()
     {

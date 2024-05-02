@@ -6,4 +6,6 @@ public interface IVideoSource : IObservable<IDecodedVideoFrame>
 {
     void Start();
     void Stop();
+
+    bool IsAlive { get; }
 }

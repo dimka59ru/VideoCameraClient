@@ -104,6 +104,8 @@ public class VideoPlayerViewModel : ViewModelBase, IObserver<IDecodedVideoFrame>
     public void Dispose()
     {
         Stop();
+        if (_videoSource is IDisposable vs)
+            vs.Dispose();
         _subscription.Dispose();
     }
 
