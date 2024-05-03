@@ -25,7 +25,8 @@
                PaneBackground="#1e1e1e">
         <SplitView.Pane>
             <StackPanel Spacing="5"
-                        Margin="5">
+                        Margin="5"
+                        VerticalAlignment="Center">
                 <ListBox ItemsSource="{Binding Items}"
                          SelectedItem="{Binding SelectedListItem}">
                     <ListBox.ItemTemplate>

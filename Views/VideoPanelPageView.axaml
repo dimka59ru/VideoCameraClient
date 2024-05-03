@@ -5,14 +5,15 @@
              xmlns:views="using:App.Views"
              xmlns:vm="using:App.ViewModels"
              x:DataType="vm:VideoPanelPageViewModel"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="250"
              x:Class="App.Views.VideoPanelPageView">
     <UserControl.DataTemplates>
         <DataTemplate DataType="{x:Type vm:VideoCellViewModel}">
             <views:VideoCellView
                 MaximizeMinimizeCellCommand="{Binding $parent[UserControl].((vm:VideoPanelPageViewModel)DataContext).MaximizeMinimizeCellCommand}"
                 IsMaximized="{Binding $parent[UserControl].((vm:VideoPanelPageViewModel)DataContext).VideoCellMaximized,
-                                Converter={x:Static ObjectConverters.IsNotNull}}"/>
+                                Converter={x:Static ObjectConverters.IsNotNull}}"
+                Margin="2"/>
         </DataTemplate>
     </UserControl.DataTemplates>
     
@@ -49,14 +50,16 @@
         <!-- Video Panel-->
         <Grid Grid.Row="1"
               IsVisible="{Binding VideoCellMaximized, Converter={x:Static ObjectConverters.IsNull}}">
-            <ItemsControl ItemsSource="{Binding Items}">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <UniformGrid Rows="{Binding RowCount}" 
-                                     Columns="{Binding ColumnCount}" />
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-            </ItemsControl>
+            <Border Padding="2">
+                <ItemsControl ItemsSource="{Binding Items}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <UniformGrid Rows="{Binding RowCount}" 
+                                         Columns="{Binding ColumnCount}"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                </ItemsControl>
+            </Border>
         </Grid>
         
         <Grid Grid.Row="1"
