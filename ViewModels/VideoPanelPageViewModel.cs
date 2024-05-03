@@ -6,7 +6,7 @@ using ReactiveUI;
 
 namespace App.ViewModels;
 
-public class MainVideoPanelViewModel : ViewModelBase, IDisposable
+public class VideoPanelPageViewModel : ViewModelBase, IDisposable
 {
     private int _columnCount;
     private int _rowCount;
@@ -35,7 +35,7 @@ public class MainVideoPanelViewModel : ViewModelBase, IDisposable
     public ReactiveCommand<VideoCellViewModel, Unit> MaximizeMinimizeCellCommand { get; }
 
     
-    public MainVideoPanelViewModel()
+    public VideoPanelPageViewModel()
     {
         OpenVideoPanelCommand = ReactiveCommand.Create<List<int>>(UpdateVideoPanel);
         MaximizeMinimizeCellCommand = ReactiveCommand.Create<VideoCellViewModel>(MaximizeMinimizeCell);

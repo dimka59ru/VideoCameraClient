@@ -4,9 +4,9 @@ using Avalonia.Markup.Xaml;
 
 namespace App.Views;
 
-public partial class MainSettings : UserControl
+public partial class VideoPanelPageView : UserControl
 {
-    public MainSettings()
+    public VideoPanelPageView()
     {
         InitializeComponent();
     }

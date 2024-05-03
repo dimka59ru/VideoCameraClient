@@ -1,51 +1,64 @@
 ﻿using System;
-using System.Windows.Input;
+using System.Collections.ObjectModel;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Media;
 using ReactiveUI;
 
 namespace App.ViewModels;
 
 public class MainWindowViewModel : ViewModelBase
 {
-    private ViewModelBase? _currentView;
-    public ViewModelBase? CurrentView
+    private ViewModelBase _currentPage = new VideoPanelPageViewModel();
+    public ViewModelBase CurrentPage
     {
-        get =>_currentView;
-        set
-        {
-            if (_currentView is IDisposable view)
-                view.Dispose();
-            this.RaiseAndSetIfChanged(ref _currentView, value);
-            RaiseProperties();
-        }
+        get => _currentPage;
+        set => this.RaiseAndSetIfChanged(ref _currentPage, value);
     }
 
-    public ICommand OpenVideoPanelCommand { get; }
-    public ICommand MainSettingsCommand { get; }
+    private ListItemTemplate? _selectedListItem;
+    public ListItemTemplate? SelectedListItem
+    {
+        get => _selectedListItem;
+        set => this.RaiseAndSetIfChanged(ref _selectedListItem, value);
+    }
     
-    public bool IsVideoPanelSelected => CurrentView is MainVideoPanelViewModel;
-    public bool IsMainSettingSelected => CurrentView is MainSettingsViewModel;
+    public ObservableCollection<ListItemTemplate> Items { get; } =
+    [
+        new ListItemTemplate(typeof(VideoPanelPageViewModel), "grid_regular"),
+        new ListItemTemplate(typeof(SettingsPageViewModel), "settings_regular")
+    ];
 
     public MainWindowViewModel()
     {
-        OpenVideoPanelCommand = ReactiveCommand.Create(VideoPanel);
-        MainSettingsCommand = ReactiveCommand.Create(MainSettings);
+        this.WhenAnyValue(x => x.SelectedListItem)
+            .Subscribe(OnSelectedListItemChanged);
+    }
+
+    private void OnSelectedListItemChanged(ListItemTemplate? value)
+    {
+        if (value is null) return;
+        var instance = Activator.CreateInstance(value.ModelType);
+        if (instance is null) return;
         
-        CurrentView = new MainVideoPanelViewModel();
+        if (CurrentPage is IDisposable currentPage) 
+            currentPage.Dispose();
+        CurrentPage = (ViewModelBase)instance;
     }
-    
-    private void VideoPanel()
-    {
-        CurrentView = new MainVideoPanelViewModel();
-    }
+}
 
-    private void MainSettings()
-    {
-        CurrentView = new MainSettingsViewModel();
-    }
+public class ListItemTemplate
+{
+    public string Label { get; set; }
+    public Type ModelType { get; set; }
+    public StreamGeometry ListItemIcon { get; }
 
-    private void RaiseProperties()
+    public ListItemTemplate(Type type, string iconKey)
     {
-        this.RaisePropertyChanged(nameof(IsVideoPanelSelected));
-        this.RaisePropertyChanged(nameof(IsMainSettingSelected));
+        ModelType = type;
+        Label = type.Name.Replace("PageViewModel", "");
+        
+        Application.Current!.TryFindResource(iconKey, out var res);
+        ListItemIcon = (StreamGeometry)res!;
     }
 }

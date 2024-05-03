@@ -16,6 +16,7 @@
         <entry key="Views/Panels/NineCellsPanelViewModel.axaml" value="App.csproj" />
         <entry key="Views/VideoCellView.axaml" value="App.csproj" />
         <entry key="Views/VideoPanel.axaml" value="App.csproj" />
+        <entry key="Views/VideoPanelPageView.axaml" value="App.csproj" />
         <entry key="Views/VideoPlayerView.axaml" value="App.csproj" />
       </map>
     </option>
