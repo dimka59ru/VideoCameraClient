@@ -8,50 +8,91 @@
              mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="250"
              x:Class="App.Views.VideoCellView"
              Name="Root">
-    <Border BorderBrush="#666666" 
-            BorderThickness="1">
+    <UserControl.Styles>
+        <Style Selector="Border.MainBorder">
+            <Setter Property="BorderBrush" Value="#666666"></Setter>
+        </Style>
+        <Style Selector="Border.MainBorder:pointerover">
+            <Setter Property="BorderBrush" Value="#888888"></Setter>
+        </Style>
+    </UserControl.Styles>
+    <Border BorderThickness="1"
+            Classes="MainBorder"
+            Name="MainBorder"
+            Background="#2d2d2d">
        <Grid>
            
             <views:VideoPlayerView DataContext="{Binding VideoPlayerViewModel}"/>
-        
-            <!-- Top Bar -->
-            <Grid>
-                <StackPanel HorizontalAlignment="Left"
-                            VerticalAlignment="Top" >
-                    <Border Background="#DD444444"
-                            CornerRadius="0 0 5 0"
-                            Height="23"
-                            Width="23">
-                        <StackPanel>
-                            <Label Grid.Row="0"
-                                   Height="20"
-                                   Content="{Binding Index}"/>
-                        </StackPanel>
-                    </Border>
+            <!-- Top bar -->
+            <Grid VerticalAlignment="Top"
+                  Background="#99555555"
+                  ColumnDefinitions="*, 6*, *"
+                  Height="24"
+                  IsVisible="{Binding #MainBorder.IsPointerOver}">
+                
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="{Binding Index}"
+                               FontSize="12"
+                               VerticalAlignment="Center"
+                               Margin="6 0 0 0"/>
+                    <TextBlock Text="Channel Name"
+                               FontSize="12"
+                               VerticalAlignment="Center"
+                               Margin="6 0 0 0"/>
                 </StackPanel>
-                <StackPanel HorizontalAlignment="Right"
-                            VerticalAlignment="Top" >
-                    <Border Background="#DD444444"
-                            CornerRadius="0 0 0 5"
-                            Height="23">
-                        <StackPanel>
-                            <views:IconButton 
-                                Command="{Binding #Root.MaximizeMinimizeCellCommand}"
-                                              CommandParameter="{Binding .}"
-                                              Classes.IsMaximized="{Binding  #Root.IsMaximized}"
-                                              Classes.NotMaximized="{Binding !#Root.IsMaximized}">
-                                <views:IconButton.Styles>
-                                    <Style Selector="views|IconButton.IsMaximized">
-                                        <Setter Property="PathIcon" Value="{StaticResource arrow_minimize_regular}"/>
-                                    </Style>
-                                    <Style Selector="views|IconButton.NotMaximized">
-                                        <Setter Property="PathIcon" Value="{StaticResource arrow_maximize_regular}"/>
-                                    </Style>
-                                </views:IconButton.Styles>
-                            </views:IconButton>
-                        </StackPanel>
-                    </Border>
+            </Grid>
+            
+            <!-- Bottom bar -->
+            <Grid VerticalAlignment="Bottom"
+                  Background="#99555555"
+                  ColumnDefinitions="*, 6*, *"
+                  Height="24"
+                  IsVisible="{Binding #MainBorder.IsPointerOver}">
+                <Grid.Styles>
+                    <Style Selector="Button">
+                        <Setter Property="CornerRadius" Value="0"/>
+                        <Setter Property="Height" Value="24"/>
+                        <Setter Property="Width" Value="24"/>
+                        <Setter Property="Background" Value="Transparent"/>
+                    </Style>
+                    <Style Selector="PathIcon">
+                        <Setter Property="Height" Value="12"/>
+                        <Setter Property="Width" Value="12"/>
+                    </Style>
+                </Grid.Styles>
+                <StackPanel Grid.Column="0" Orientation="Horizontal"
+                            HorizontalAlignment="Left">
+                    <Button>
+                        <PathIcon Data="{StaticResource settings_regular}"/>
+                    </Button>
                 </StackPanel>
+            
+               <StackPanel Grid.Column="1" Orientation="Horizontal"
+                           HorizontalAlignment="Center">
+                   <Button Command="{Binding VideoPlayerViewModel.StartCommand}">
+                       <PathIcon Data="{StaticResource play_regular}"/>
+                   </Button>
+                   <Button Command="{Binding VideoPlayerViewModel.StopCommand}">
+                       <PathIcon Data="{StaticResource stop_regular}"/>
+                   </Button>
+               </StackPanel>
+            
+               <StackPanel Grid.Column="2" Orientation="Horizontal"
+                           HorizontalAlignment="Right">
+                   <Button Command="{Binding #Root.MaximizeMinimizeCellCommand}"
+                           CommandParameter="{Binding .}">
+                       <PathIcon Classes.IsMaximized="{Binding  #Root.IsMaximized}"
+                                 Classes.NotMaximized="{Binding !#Root.IsMaximized}"/>
+                       <Button.Styles>
+                           <Style Selector="PathIcon.IsMaximized">
+                               <Setter Property="Data" Value="{StaticResource arrow_minimize_regular}"/>
+                           </Style>
+                           <Style Selector="PathIcon.NotMaximized">
+                               <Setter Property="Data" Value="{StaticResource arrow_maximize_regular}"/>
+                           </Style>
+                       </Button.Styles>
+                   </Button>
+               </StackPanel>
             </Grid>
             
        </Grid>
