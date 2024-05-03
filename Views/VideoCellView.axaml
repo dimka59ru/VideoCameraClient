@@ -15,6 +15,51 @@
         <Style Selector="Border.MainBorder:pointerover">
             <Setter Property="BorderBrush" Value="#888888"></Setter>
         </Style>
+        
+        <Style Selector="Grid.showme">
+            <Style.Animations>
+                <Animation Duration="0:0:0.25"
+                           FillMode="Forward"
+                           Easing="SineEaseInOut">
+                    <KeyFrame Cue="0%">
+                        <Setter Property="IsVisible" Value="true"/>
+                    </KeyFrame>
+                    <KeyFrame Cue="100%">
+                        		<Setter Property="TranslateTransform.Y" Value="0"/>
+                        <Setter Property="IsVisible" Value="true"/>
+                    </KeyFrame>
+                </Animation>
+            </Style.Animations>
+        </Style>
+
+        <Style Selector="Grid.hidemeTop">
+            <Style.Animations>
+                <Animation Duration="0:0:0.25"
+                           FillMode="Forward"
+                           Easing="SineEaseInOut">
+                    <KeyFrame Cue="0%">
+                    </KeyFrame>
+                    <KeyFrame Cue="100%">
+                        	<Setter Property="TranslateTransform.Y" Value="-24"/>
+                        <Setter Property="IsVisible" Value="false"/>
+                    </KeyFrame>
+                </Animation>
+            </Style.Animations>
+        </Style>
+        <Style Selector="Grid.hidemeBottom">
+            <Style.Animations>
+                <Animation Duration="0:0:0.25"
+                           FillMode="Forward"
+                           Easing="SineEaseInOut">
+                    <KeyFrame Cue="0%">
+                    </KeyFrame>
+                    <KeyFrame Cue="100%">
+                        <Setter Property="TranslateTransform.Y" Value="24"/>
+                        <Setter Property="IsVisible" Value="false"/>
+                    </KeyFrame>
+                </Animation>
+            </Style.Animations>
+        </Style>
     </UserControl.Styles>
     <Border BorderThickness="1"
             Classes="MainBorder"
@@ -28,7 +73,8 @@
                   Background="#99555555"
                   ColumnDefinitions="*, 6*, *"
                   Height="24"
-                  IsVisible="{Binding #MainBorder.IsPointerOver}">
+                  Classes.showme="{CompiledBinding #MainBorder.IsPointerOver}"
+                  Classes.hidemeTop="{CompiledBinding !#MainBorder.IsPointerOver}">
                 
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="{Binding Index}"
@@ -47,7 +93,8 @@
                   Background="#99555555"
                   ColumnDefinitions="*, 6*, *"
                   Height="24"
-                  IsVisible="{Binding #MainBorder.IsPointerOver}">
+                  Classes.showme="{CompiledBinding #MainBorder.IsPointerOver}"
+                  Classes.hidemeBottom="{CompiledBinding !#MainBorder.IsPointerOver}">
                 <Grid.Styles>
                     <Style Selector="Button">
                         <Setter Property="CornerRadius" Value="0"/>
