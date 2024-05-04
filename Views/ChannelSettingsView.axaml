@@ -1,0 +1,23 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="App.Views.ChannelSettingsView"
+             Background="{StaticResource BasicBackgroundBrush}"
+             Name="Root">
+    <Grid RowDefinitions="Auto, *">
+        <Border Grid.Row="0" Background="{StaticResource BasicBlackBrush}">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button Command="{Binding #Root.CloseCommand}"
+                        BorderThickness="0">
+                    <PathIcon Data="{StaticResource dismiss_circle_regular}"
+                              Height="16"
+                              Width="16"/>
+                </Button>
+            </StackPanel>
+        </Border>
+        <Grid Grid.Row="1"></Grid>
+        
+    </Grid>
+</UserControl>

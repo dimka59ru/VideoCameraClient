@@ -11,6 +11,7 @@ public class VideoPanelPageViewModel : ViewModelBase, IDisposable
     private int _columnCount;
     private int _rowCount;
     private VideoCellViewModel? _videoCellMaximized;
+    private bool _isChannelSettingsOpened;
     
     public int ColumnCount
     {
@@ -30,16 +31,29 @@ public class VideoPanelPageViewModel : ViewModelBase, IDisposable
         set => this.RaiseAndSetIfChanged(ref _videoCellMaximized, value);
     }
     
+    public bool IsChannelSettingsOpened
+    {
+        get => _isChannelSettingsOpened;
+        set => this.RaiseAndSetIfChanged(ref _isChannelSettingsOpened, value);
+    }
+    
     public ObservableCollection<VideoCellViewModel> Items { get; } = [];
     public ReactiveCommand<List<int>, Unit> OpenVideoPanelCommand { get; }
     public ReactiveCommand<VideoCellViewModel, Unit> MaximizeMinimizeCellCommand { get; }
+    public ReactiveCommand<VideoCellViewModel, Unit> OpenCloseChannelSettingsCommand { get; }
 
     
     public VideoPanelPageViewModel()
     {
         OpenVideoPanelCommand = ReactiveCommand.Create<List<int>>(UpdateVideoPanel);
         MaximizeMinimizeCellCommand = ReactiveCommand.Create<VideoCellViewModel>(MaximizeMinimizeCell);
+        OpenCloseChannelSettingsCommand = ReactiveCommand.Create<VideoCellViewModel>(OpenCloseChannelSettings);
         UpdateVideoPanel([2, 2]);
+    }
+
+    private void OpenCloseChannelSettings(VideoCellViewModel obj)
+    {
+        IsChannelSettingsOpened = !IsChannelSettingsOpened;
     }
 
     private void MaximizeMinimizeCell(VideoCellViewModel videoCell)

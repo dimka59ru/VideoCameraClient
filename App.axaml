@@ -19,10 +19,17 @@
         
         <SolidColorBrush x:Key="BlueCharcoalBrush">#212529</SolidColorBrush>
         <SolidColorBrush x:Key="DarkGreyBrush">#444444</SolidColorBrush>
+        <SolidColorBrush x:Key="TranslucentGrayBrush">#99555555</SolidColorBrush>
+        <SolidColorBrush x:Key="BasicBackgroundBrush">#2d2d2d</SolidColorBrush>
+        <SolidColorBrush x:Key="BasicBlackBrush">#1e1e1e</SolidColorBrush>
     </Application.Resources>
 
     <Application.Styles>
         <FluentTheme />     
         <StyleInclude Source = "avares://App/Views/IconButton.axaml" />
+        
+        <Style Selector="Button">
+            <Setter Property="CornerRadius" Value="0"/>
+        </Style>
     </Application.Styles>
 </Application>

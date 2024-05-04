@@ -11,6 +11,7 @@
         <DataTemplate DataType="{x:Type vm:VideoCellViewModel}">
             <views:VideoCellView
                 MaximizeMinimizeCellCommand="{Binding $parent[UserControl].((vm:VideoPanelPageViewModel)DataContext).MaximizeMinimizeCellCommand}"
+                OpenCloseChannelSettingsCommand="{Binding $parent[UserControl].((vm:VideoPanelPageViewModel)DataContext).OpenCloseChannelSettingsCommand}"
                 IsMaximized="{Binding $parent[UserControl].((vm:VideoPanelPageViewModel)DataContext).VideoCellMaximized,
                                 Converter={x:Static ObjectConverters.IsNotNull}}"
                 Margin="2"/>
@@ -48,8 +49,7 @@
         </StackPanel>
         
         <!-- Video Panel-->
-        <Grid Grid.Row="1"
-              IsVisible="{Binding VideoCellMaximized, Converter={x:Static ObjectConverters.IsNull}}">
+        <Grid Grid.Row="1">
             <Border Padding="2">
                 <ItemsControl ItemsSource="{Binding Items}">
                     <ItemsControl.ItemsPanel>
@@ -65,6 +65,15 @@
         <Grid Grid.Row="1"
               IsVisible="{Binding VideoCellMaximized, Converter={x:Static ObjectConverters.IsNotNull}}">
             <ContentControl Content="{Binding VideoCellMaximized}"/>
+        </Grid>
+        
+        <Grid Grid.Row="1" IsVisible="{Binding IsChannelSettingsOpened}">
+            <Grid RowDefinitions="*, 10*, *"
+                  ColumnDefinitions="*, 10*, *"
+                  Background="{StaticResource TranslucentGrayBrush}">
+                <views:ChannelSettingsView Grid.Row="1" Grid.Column="1"
+                                           CloseCommand="{Binding OpenCloseChannelSettingsCommand}"/>
+            </Grid>
         </Grid>
         
     </Grid>
