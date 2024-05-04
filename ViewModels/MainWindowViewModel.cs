@@ -9,7 +9,7 @@ namespace App.ViewModels;
 
 public class MainWindowViewModel : ViewModelBase
 {
-    private ViewModelBase _currentPage = new VideoPanelPageViewModel();
+    private ViewModelBase _currentPage;
     public ViewModelBase CurrentPage
     {
         get => _currentPage;
@@ -31,6 +31,8 @@ public class MainWindowViewModel : ViewModelBase
 
     public MainWindowViewModel()
     {
+        SelectedListItem = Items[0]; // Set Current Page
+            
         this.WhenAnyValue(x => x.SelectedListItem)
             .Subscribe(OnSelectedListItemChanged);
     }
