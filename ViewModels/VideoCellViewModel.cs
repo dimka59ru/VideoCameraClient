@@ -14,7 +14,8 @@ public class VideoCellViewModel : ViewModelBase, IDisposable
         Index = index;
         IVideoSource vs = new RandomImagesVideoSource();
         if (index == 1)
-            vs = new VideoStreamSource("rtsp://admin:Admin123@192.168.4.223:554/ch0/stream0");
+            //vs = new VideoStreamSource("rtsp://admin:Admin123@192.168.4.223:554/ch0/stream0");
+            vs = new VideoStreamSource("http://158.58.130.148/mjpg/video.mjpg");
         if (index == 2)
             vs = new VideoStreamSource("http://158.58.130.148/mjpg/video.mjpg");
         if (index == 3)

@@ -27,7 +27,7 @@ public class VideoStreamSource : IVideoSource, IDisposable
         Console.WriteLine($"FFmpeg version info: {ffmpeg.av_version_info()}");
 
         // Подписываем VideoSourcesWatchdog на получение кадров от этого источника
-        _watchdog = new VideoSourceWatchdog(TimeSpan.FromSeconds(15), Start, Stop);
+        _watchdog = new VideoSourceWatchdog(TimeSpan.FromSeconds(15), StartForWatchdog, StopForWatchdog);
         _subscription = Subscribe(_watchdog);
     }
 
@@ -37,8 +37,25 @@ public class VideoStreamSource : IVideoSource, IDisposable
         return new Unsubscriber<IDecodedVideoFrame>(_frameObservers, observer);
     }
 
+    private bool _isManuallyStopped; // bullshit :(
+    private void StartForWatchdog()
+    {
+        if (_isManuallyStopped)
+            return;
+        Start();
+    }
+    
+    private void StopForWatchdog()
+    {
+        if (_isManuallyStopped)
+            return;
+        Stop();
+    }
+    
     public void Start()
     {
+        _isManuallyStopped = false;
+        
         _cancellationTokenSource?.Dispose();
         _cancellationTokenSource = new CancellationTokenSource();
         Task.Run(() => DecodeVideoStream(_cancellationTokenSource.Token), _cancellationTokenSource.Token);
@@ -47,6 +64,8 @@ public class VideoStreamSource : IVideoSource, IDisposable
 
     public void Stop()
     {
+        _isManuallyStopped = true;
+        
         _cancellationTokenSource?.Cancel();
         Console.WriteLine($"Source {_url} Stop was called.");
     }
