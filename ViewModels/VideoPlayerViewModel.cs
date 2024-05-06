@@ -1,6 +1,7 @@
 using System;
 using System.Runtime.InteropServices;
 using System.Windows.Input;
+using App.Models;
 using App.VideoSources;
 using Avalonia;
 using Avalonia.Media.Imaging;
@@ -40,13 +41,14 @@ public class VideoPlayerViewModel : ViewModelBase, IObserver<IDecodedVideoFrame>
     
     private readonly IDisposable _subscription;
     
-    public VideoPlayerViewModel(IVideoSource videoSource)
+    public VideoPlayerViewModel(IVideoSource videoSource, ChannelInfo channelInfo)
     {
         _videoSource = videoSource ?? throw new ArgumentNullException(nameof(videoSource));
         
         StartCommand = ReactiveCommand.Create(Start, StartCommandCanExecute);
         StopCommand = ReactiveCommand.Create(Stop, StopCommandCanExecute);
         
+        // Подписываем данный плеер на получение кадров от видеоисточника
         _subscription =  videoSource.Subscribe(this);
         Start();
     }
@@ -61,11 +63,6 @@ public class VideoPlayerViewModel : ViewModelBase, IObserver<IDecodedVideoFrame>
     {
         _videoSource.Stop();
         Started = false;
-    }
-
-    private void OnFrameReceived(object? sender, IDecodedVideoFrame e)
-    {
-        FrameImage = CreateBitmapFromPixelData(e.BgraPixelData, e.Width, e.Height);
     }
 
     private static WriteableBitmap CreateBitmapFromPixelData(byte[] bgraPixelData, int pixelWidth, int pixelHeight)

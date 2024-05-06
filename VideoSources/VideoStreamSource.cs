@@ -15,15 +15,20 @@ public class VideoStreamSource : IVideoSource, IDisposable
     private readonly string _url;
     private readonly List<IObserver<IDecodedVideoFrame>> _frameObservers = [];
     private CancellationTokenSource? _cancellationTokenSource;
-    private DateTime _lastFrameReceivedTime = DateTime.MinValue;
+    private readonly IDisposable _subscription;
+    private readonly VideoSourceWatchdog _watchdog;
 
-    public bool IsAlive => DateTime.UtcNow - _lastFrameReceivedTime < TimeSpan.FromSeconds(5);
+    public bool IsAlive => true;
 
     public VideoStreamSource(string url)
     {
         _url = url;
         FFmpegBinariesHelper.RegisterFFmpegBinaries();
         Console.WriteLine($"FFmpeg version info: {ffmpeg.av_version_info()}");
+
+        // Подписываем VideoSourcesWatchdog на получение кадров от этого источника
+        _watchdog = new VideoSourceWatchdog(TimeSpan.FromSeconds(15), Start, Stop);
+        _subscription = Subscribe(_watchdog);
     }
 
     public IDisposable Subscribe(IObserver<IDecodedVideoFrame> observer)
@@ -34,17 +39,16 @@ public class VideoStreamSource : IVideoSource, IDisposable
 
     public void Start()
     {
-        SourcesRestarter.Instance.Add(this);
-        
         _cancellationTokenSource?.Dispose();
         _cancellationTokenSource = new CancellationTokenSource();
         Task.Run(() => DecodeVideoStream(_cancellationTokenSource.Token), _cancellationTokenSource.Token);
+        Console.WriteLine($"Source {_url} Start was called.");
     }
 
     public void Stop()
     {
-        SourcesRestarter.Instance.Remove(this);
         _cancellationTokenSource?.Cancel();
+        Console.WriteLine($"Source {_url} Stop was called.");
     }
     
     private void DecodeVideoStream(CancellationToken token)
@@ -75,8 +79,6 @@ public class VideoStreamSource : IVideoSource, IDisposable
             {
                 break;
             }
-
-            _lastFrameReceivedTime = DateTime.UtcNow;
             
             unsafe
             {
@@ -104,5 +106,7 @@ public class VideoStreamSource : IVideoSource, IDisposable
     public void Dispose()
     {
         _cancellationTokenSource?.Dispose();
+        _subscription.Dispose();
+        _watchdog.Dispose();
     }
 }

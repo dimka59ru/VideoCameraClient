@@ -1,4 +1,5 @@
 using System;
+using App.Models;
 using App.VideoSources;
 
 namespace App.ViewModels;
@@ -33,7 +34,8 @@ public class VideoCellViewModel : ViewModelBase, IDisposable
         if (index == 9)
             vs = new VideoStreamSource("http://77.222.181.11:8080/mjpg/video.mjpg");
         
-        VideoPlayerViewModel = new VideoPlayerViewModel(vs);
+        
+        VideoPlayerViewModel = new VideoPlayerViewModel(vs, new ChannelInfo(index, index.ToString()));
     }
 
     public void Dispose()
