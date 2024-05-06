@@ -37,35 +37,43 @@ public class VideoStreamSource : IVideoSource, IDisposable
         return new Unsubscriber<IDecodedVideoFrame>(_frameObservers, observer);
     }
 
-    private bool _isManuallyStopped; // bullshit :(
+    private bool _isExternalStopped;
     private void StartForWatchdog()
     {
-        if (_isManuallyStopped)
+        if (_isExternalStopped)
             return;
-        Start();
+        StartInternal();
     }
     
     private void StopForWatchdog()
     {
-        if (_isManuallyStopped)
+        if (_isExternalStopped)
             return;
-        Stop();
+        StopInternal();
     }
     
     public void Start()
     {
-        _isManuallyStopped = false;
-        
+        _isExternalStopped = false;
+        StartInternal();
+    }
+
+    public void Stop()
+    {
+        _isExternalStopped = true;
+        StopInternal();
+    }
+
+    private void StartInternal()
+    {
         _cancellationTokenSource?.Dispose();
         _cancellationTokenSource = new CancellationTokenSource();
         Task.Run(() => DecodeVideoStream(_cancellationTokenSource.Token), _cancellationTokenSource.Token);
         Console.WriteLine($"Source {_url} Start was called.");
     }
-
-    public void Stop()
+    
+    private void StopInternal()
     {
-        _isManuallyStopped = true;
-        
         _cancellationTokenSource?.Cancel();
         Console.WriteLine($"Source {_url} Stop was called.");
     }
