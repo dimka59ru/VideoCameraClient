@@ -63,10 +63,6 @@ public class VideoSourceWatchdog : IObserver<IDecodedVideoFrame>, IDisposable
         {
             _lastFrameReceivedTime = null;
         }
-        catch (Exception e)
-        {
-            
-        }
         finally
         {
             _semaphoreSlim.Release();
