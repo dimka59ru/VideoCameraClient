@@ -26,7 +26,7 @@
 
     <Application.Styles>
         <FluentTheme />     
-        <StyleInclude Source = "avares://App/Views/IconButton.axaml" />
+        <StyleInclude Source = "avares://App/Controls/IconButton.axaml" />
         
         <Style Selector="Button">
             <Setter Property="CornerRadius" Value="0"/>

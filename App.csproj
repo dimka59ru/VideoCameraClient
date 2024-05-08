@@ -27,4 +27,15 @@
     <PackageReference Include="Avalonia.ReactiveUI" Version="11.0.10" />
     <PackageReference Include="FFmpeg.AutoGen" Version="4.4.1.1" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Controls\GridButton.axaml.cs">
+      <DependentUpon>GridButton.axaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Controls\IconButton.axaml.cs">
+      <DependentUpon>IconButton.axaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
 </Project>
