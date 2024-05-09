@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Runtime.InteropServices;
+using App.Services;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Media;
+using FFmpeg.AutoGen;
 using ReactiveUI;
 
 namespace App.ViewModels;
@@ -32,9 +35,13 @@ public class MainWindowViewModel : ViewModelBase
     public MainWindowViewModel()
     {
         SelectedListItem = Items[0]; // Set Current Page
-            
+        
         this.WhenAnyValue(x => x.SelectedListItem)
             .Subscribe(OnSelectedListItemChanged);
+        
+        FFmpegBinariesHelper.RegisterFFmpegBinaries();
+        SetupFfmpegLogging();
+        Console.WriteLine($"FFmpeg version info: {ffmpeg.av_version_info()}");
     }
 
     private void OnSelectedListItemChanged(ListItemTemplate? value)
@@ -46,6 +53,28 @@ public class MainWindowViewModel : ViewModelBase
         if (CurrentPage is IDisposable currentPage) 
             currentPage.Dispose();
         CurrentPage = (ViewModelBase)instance;
+    }
+    
+    private static unsafe void SetupFfmpegLogging()
+    {
+        ffmpeg.av_log_set_level(ffmpeg.AV_LOG_VERBOSE);
+
+        // do not convert to local function
+        av_log_set_callback_callback logCallback = (p0, level, format, vl) =>
+        {
+            if (level > ffmpeg.av_log_get_level()) return;
+
+            var lineSize = 1024;
+            var lineBuffer = stackalloc byte[lineSize];
+            var printPrefix = 1;
+            ffmpeg.av_log_format_line(p0, level, format, vl, lineBuffer, lineSize, &printPrefix);
+            var line = Marshal.PtrToStringAnsi((IntPtr)lineBuffer);
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.Write(line);
+            Console.ResetColor();
+        };
+
+        ffmpeg.av_log_set_callback(logCallback);
     }
 }
 

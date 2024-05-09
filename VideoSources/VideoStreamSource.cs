@@ -23,9 +23,7 @@ public class VideoStreamSource : IVideoSource, IDisposable
     public VideoStreamSource(string url)
     {
         _url = url;
-        FFmpegBinariesHelper.RegisterFFmpegBinaries();
-        Console.WriteLine($"FFmpeg version info: {ffmpeg.av_version_info()}");
-
+        
         // Подписываем VideoSourcesWatchdog на получение кадров от этого источника
         _watchdog = new VideoSourceWatchdog(TimeSpan.FromSeconds(15), StartForWatchdog, StopForWatchdog);
         _subscription = Subscribe(_watchdog);
