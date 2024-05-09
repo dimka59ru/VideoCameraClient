@@ -47,12 +47,17 @@ public class MainWindowViewModel : ViewModelBase
     private void OnSelectedListItemChanged(ListItemTemplate? value)
     {
         if (value is null) return;
-        var instance = Activator.CreateInstance(value.ModelType);
-        if (instance is null) return;
-        
         if (CurrentPage is IDisposable currentPage) 
             currentPage.Dispose();
-        CurrentPage = (ViewModelBase)instance;
+
+        var type = value.ModelType;
+        
+        CurrentPage = true switch
+        {
+            true when type == typeof(VideoPanelPageViewModel) => new VideoPanelPageViewModel(),
+            true when type == typeof(SettingsPageViewModel) => new SettingsPageViewModel(),
+            _ => CurrentPage
+        };
     }
     
     private static unsafe void SetupFfmpegLogging()

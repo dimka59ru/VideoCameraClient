@@ -12,7 +12,7 @@ public class VideoPanelPageViewModel : ViewModelBase, IDisposable
     private int _rowCount;
     private VideoCellViewModel? _videoCellMaximized;
     private bool _isChannelSettingsOpened;
-    private PanelButtonParams? _selectedPanelButton;
+    private int _selectedPanelIndex;
 
     public int ColumnCount
     {
@@ -38,20 +38,20 @@ public class VideoPanelPageViewModel : ViewModelBase, IDisposable
         set => this.RaiseAndSetIfChanged(ref _isChannelSettingsOpened, value);
     }
     
-    public PanelButtonParams? SelectedPanelButton
+    public int SelectedPanelIndex
     {
-        get => _selectedPanelButton;
-        set => this.RaiseAndSetIfChanged(ref _selectedPanelButton, value);
+        get => _selectedPanelIndex;
+        set => this.RaiseAndSetIfChanged(ref _selectedPanelIndex, value);
     }
     
     public ObservableCollection<VideoCellViewModel> Cells { get; } = [];
-    public ObservableCollection<PanelButtonParams> PanelButtons { get; } = 
+    public ObservableCollection<PanelParams> Panels { get; } = 
     [
-        new PanelButtonParams(1, 1),
-        new PanelButtonParams(2, 1),
-        new PanelButtonParams(2, 2),
-        new PanelButtonParams(2, 3),
-        new PanelButtonParams(3, 3),
+        new PanelParams(1, 1),
+        new PanelParams(2, 1),
+        new PanelParams(2, 2),
+        new PanelParams(2, 3),
+        new PanelParams(3, 3),
     ];
     
     public ReactiveCommand<VideoCellViewModel, Unit> MaximizeMinimizeCellCommand { get; }
@@ -60,19 +60,23 @@ public class VideoPanelPageViewModel : ViewModelBase, IDisposable
     
     public VideoPanelPageViewModel()
     {
-        SelectedPanelButton = PanelButtons[2];
-        this.WhenAnyValue(x => x.SelectedPanelButton)
-            .Subscribe(OnSelectedPanelButtonChanged);
+        UserSettings.Load();
+        SelectedPanelIndex = UserSettings.Instance.LastOpenPanelIndex;
+        
+        this.WhenAnyValue(x => x.SelectedPanelIndex)
+            .Subscribe(OnSelectedPanelIndexChanged);
         
         MaximizeMinimizeCellCommand = ReactiveCommand.Create<VideoCellViewModel>(MaximizeMinimizeCell);
         OpenCloseChannelSettingsCommand = ReactiveCommand.Create<VideoCellViewModel>(OpenCloseChannelSettings);
-        
     }
 
-    private void OnSelectedPanelButtonChanged(PanelButtonParams? value)
+    private void OnSelectedPanelIndexChanged(int index)
     {
-        if (value is null) return;
-        UpdateVideoPanel(value);
+        var selectedPanel = Panels[index];
+        UpdateVideoPanel(selectedPanel);
+
+        UserSettings.Instance.LastOpenPanelIndex = SelectedPanelIndex;
+        UserSettings.Save();
     }
         
     private void OpenCloseChannelSettings(VideoCellViewModel obj)
@@ -90,7 +94,7 @@ public class VideoPanelPageViewModel : ViewModelBase, IDisposable
     /// 
     /// </summary>
     /// <param name="panelParams">first: rows, second: columns</param>
-    private void UpdateVideoPanel(PanelButtonParams value)
+    private void UpdateVideoPanel(PanelParams value)
     {
         RowCount = value.RowCount;
         ColumnCount = value.ColumnCount;

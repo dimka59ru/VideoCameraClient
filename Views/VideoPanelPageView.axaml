@@ -21,15 +21,15 @@
     
     <Grid RowDefinitions="Auto, *">
         <ListBox Grid.Row="0"
-                 ItemsSource="{Binding PanelButtons}"
-                 SelectedItem="{Binding SelectedPanelButton}"
+                 ItemsSource="{Binding Panels}"
+                 SelectedIndex="{Binding SelectedPanelIndex, Mode=TwoWay}"
                  Margin="4 4 4 0"
                  HorizontalAlignment="Center"
                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                  ScrollViewer.VerticalScrollBarVisibility="Disabled"
                  Height="54">
             <ListBox.ItemTemplate>
-                <DataTemplate DataType="{x:Type models:PanelButtonParams}">
+                <DataTemplate DataType="{x:Type models:PanelParams}">
                     <views:GridButton RowCount="{Binding RowCount}" 
                         ColumnCount="{Binding ColumnCount}"
                         HorizontalAlignment="Center"

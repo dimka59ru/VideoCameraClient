@@ -1,33 +1,33 @@
 using System;
 using System.IO;
+using System.Linq;
+using System.Reflection;
 using System.Text.Json;
 
 
 namespace App.Infrastructure;
 
-public class SettingsManager<T> where T : class
+public abstract class SettingsManager<T> where T : SettingsManager<T>, new()
 {
-    private readonly string _filePath;
+    private static readonly string _filePath = GetLocalFilePath($"{typeof(T).Name}.json");
+    public static T Instance { get; private set; }
 
-    public SettingsManager(string fileName)
+    private static string GetLocalFilePath(string fileName)
     {
-        _filePath = GetLocalFilePath(fileName);
+        string appData = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData); 
+        var companyName = Assembly.GetEntryAssembly().GetCustomAttributes<AssemblyCompanyAttribute>().FirstOrDefault();
+        return Path.Combine(appData, companyName?.Company ?? Assembly.GetEntryAssembly().GetName().Name, fileName);
     }
 
-    private string GetLocalFilePath(string fileName)
-    {
-        string appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-        return Path.Combine(appData, fileName);
-    }
+    public static void Load() =>
+        Instance = File.Exists(_filePath) 
+            ? JsonSerializer.Deserialize<T>(File.ReadAllText(_filePath)) 
+            : new T();
 
-    public T LoadSettings() =>
-        File.Exists(_filePath) ?
-            JsonSerializer.Deserialize<T>(File.ReadAllText(_filePath)) :
-            null;
-
-    public void SaveSettings(T settings)
+    public static void Save()
     {
-        string json = JsonSerializer.Serialize(settings);
+        string json = JsonSerializer.Serialize(Instance);
+        Directory.CreateDirectory(Path.GetDirectoryName(_filePath));
         File.WriteAllText(_filePath, json);
     }
 }

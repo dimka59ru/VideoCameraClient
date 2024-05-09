@@ -1,8 +1,8 @@
 namespace App.Models;
 
-public class PanelButtonParams
+public class PanelParams
 {
-    public PanelButtonParams(int rowCount, int columnCount)
+    public PanelParams(int rowCount, int columnCount)
     {
         RowCount = rowCount;
         ColumnCount = columnCount;
