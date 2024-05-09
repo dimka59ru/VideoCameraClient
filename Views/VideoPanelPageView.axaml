@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:views="using:App.Views"
              xmlns:vm="using:App.ViewModels"
+             xmlns:models="using:App.Models"
              x:DataType="vm:VideoPanelPageViewModel"
              mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="250"
              x:Class="App.Views.VideoPanelPageView">
@@ -19,39 +20,37 @@
     </UserControl.DataTemplates>
     
     <Grid RowDefinitions="Auto, *">
-        
-        <!-- Select Panel Buttons -->
-        <StackPanel Grid.Row="0"
-                    Height="50"
-                    Orientation="Horizontal"
-                    HorizontalAlignment="Center">
-            
-            <!-- 1x1 -->
-            <views:GridButton RowCount="1" ColumnCount="1"
-                              Command="{Binding OpenVideoPanelCommand}"/>
-            
-            <!-- 2x1 -->
-            <views:GridButton RowCount="2" ColumnCount="1"
-                              Command="{Binding OpenVideoPanelCommand}"/>
-            
-            <!-- 2x2 -->
-            <views:GridButton RowCount="2" ColumnCount="2"
-                              Command="{Binding OpenVideoPanelCommand}"/>
-            
-            <!-- 2x3 -->
-            <views:GridButton RowCount="2" ColumnCount="3"
-                              Command="{Binding OpenVideoPanelCommand}"/>
-            
-            <!-- 3x3 -->
-            <views:GridButton RowCount="3" ColumnCount="3"
-                              Command="{Binding OpenVideoPanelCommand}"/>
-            
-        </StackPanel>
+        <ListBox Grid.Row="0"
+                 ItemsSource="{Binding PanelButtons}"
+                 SelectedItem="{Binding SelectedPanelButton}"
+                 Margin="4 4 4 0"
+                 HorizontalAlignment="Center"
+                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                 ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                 Height="54">
+            <ListBox.ItemTemplate>
+                <DataTemplate DataType="{x:Type models:PanelButtonParams}">
+                    <views:GridButton RowCount="{Binding RowCount}" 
+                        ColumnCount="{Binding ColumnCount}"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Width="40"
+                        Height="40"
+                        Margin="0"/>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+            <ListBox.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <StackPanel Orientation="Horizontal" 
+                                Spacing="0"/>
+                </ItemsPanelTemplate>
+            </ListBox.ItemsPanel>
+        </ListBox>
         
         <!-- Video Panel-->
         <Grid Grid.Row="1">
             <Border Padding="2">
-                <ItemsControl ItemsSource="{Binding Items}">
+                <ItemsControl ItemsSource="{Binding Cells}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
                             <UniformGrid Rows="{Binding RowCount}" 

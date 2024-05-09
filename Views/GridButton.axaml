@@ -6,35 +6,26 @@
              x:Class="App.Views.GridButton"
              x:Name="Root"
              Margin="4">
-    <Button Margin="0" Padding="0" CornerRadius="0"
-            Background="Transparent"
-            Command="{Binding ElementName=Root, Path=Command}"
-            CommandParameter="{Binding ElementName=Root, Path=ButtonParams}"
-            Width="40"
-            Height="40">
-        <Grid>
-            <Border BorderBrush="White" 
-                    BorderThickness="1">
-            <ItemsControl ItemsSource="{Binding Items, ElementName=Root}">
+    <Border BorderBrush="White" 
+            BorderThickness="1">
+        <ItemsControl ItemsSource="{Binding Items, ElementName=Root}">
+            <!-- This panel will be used to hold the items -->
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <UniformGrid Rows="{Binding RowCount, ElementName=Root}" 
+                                 Columns="{Binding ColumnCount, ElementName=Root}" 
+                                 Margin="0"/>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
 
-                <!-- This panel will be used to hold the items -->
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <UniformGrid Rows="{Binding RowCount, ElementName=Root}" 
-                                     Columns="{Binding ColumnCount, ElementName=Root}" />
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-
-                <!-- Each item will be drawn using this template -->
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <Border BorderBrush="White" 
-                                BorderThickness="0 0 1 1"
-                                Margin="0 0 -1 -1"/>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-            </Border>
-        </Grid>
-    </Button>
+            <!-- Each item will be drawn using this template -->
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Border BorderBrush="White" 
+                            BorderThickness="0 0 1 1"
+                            Margin="0 0 -1 -1"/>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+    </Border>
 </UserControl>

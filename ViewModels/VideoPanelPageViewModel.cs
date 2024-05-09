@@ -1,7 +1,7 @@
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Reactive;
+using App.Models;
 using ReactiveUI;
 
 namespace App.ViewModels;
@@ -12,7 +12,8 @@ public class VideoPanelPageViewModel : ViewModelBase, IDisposable
     private int _rowCount;
     private VideoCellViewModel? _videoCellMaximized;
     private bool _isChannelSettingsOpened;
-    
+    private PanelButtonParams? _selectedPanelButton;
+
     public int ColumnCount
     {
         get => _columnCount;
@@ -37,20 +38,43 @@ public class VideoPanelPageViewModel : ViewModelBase, IDisposable
         set => this.RaiseAndSetIfChanged(ref _isChannelSettingsOpened, value);
     }
     
-    public ObservableCollection<VideoCellViewModel> Items { get; } = [];
-    public ReactiveCommand<List<int>, Unit> OpenVideoPanelCommand { get; }
+    public PanelButtonParams? SelectedPanelButton
+    {
+        get => _selectedPanelButton;
+        set => this.RaiseAndSetIfChanged(ref _selectedPanelButton, value);
+    }
+    
+    public ObservableCollection<VideoCellViewModel> Cells { get; } = [];
+    public ObservableCollection<PanelButtonParams> PanelButtons { get; } = 
+    [
+        new PanelButtonParams(1, 1),
+        new PanelButtonParams(2, 1),
+        new PanelButtonParams(2, 2),
+        new PanelButtonParams(2, 3),
+        new PanelButtonParams(3, 3),
+    ];
+    
     public ReactiveCommand<VideoCellViewModel, Unit> MaximizeMinimizeCellCommand { get; }
     public ReactiveCommand<VideoCellViewModel, Unit> OpenCloseChannelSettingsCommand { get; }
 
     
     public VideoPanelPageViewModel()
     {
-        OpenVideoPanelCommand = ReactiveCommand.Create<List<int>>(UpdateVideoPanel);
+        SelectedPanelButton = PanelButtons[2];
+        this.WhenAnyValue(x => x.SelectedPanelButton)
+            .Subscribe(OnSelectedPanelButtonChanged);
+        
         MaximizeMinimizeCellCommand = ReactiveCommand.Create<VideoCellViewModel>(MaximizeMinimizeCell);
         OpenCloseChannelSettingsCommand = ReactiveCommand.Create<VideoCellViewModel>(OpenCloseChannelSettings);
-        UpdateVideoPanel([2, 2]);
+        
     }
 
+    private void OnSelectedPanelButtonChanged(PanelButtonParams? value)
+    {
+        if (value is null) return;
+        UpdateVideoPanel(value);
+    }
+        
     private void OpenCloseChannelSettings(VideoCellViewModel obj)
     {
         IsChannelSettingsOpened = !IsChannelSettingsOpened;
@@ -66,37 +90,34 @@ public class VideoPanelPageViewModel : ViewModelBase, IDisposable
     /// 
     /// </summary>
     /// <param name="panelParams">first: rows, second: columns</param>
-    private void UpdateVideoPanel(List<int> panelParams)
+    private void UpdateVideoPanel(PanelButtonParams value)
     {
-        if (panelParams.Count != 2 )
-            throw new ArgumentException("incorrect number of parameters");
-        
-        RowCount = panelParams[0];
-        ColumnCount = panelParams[1];
+        RowCount = value.RowCount;
+        ColumnCount = value.ColumnCount;
         
         var requiredCells = RowCount * ColumnCount;
-        var currentCountCells = Items.Count;
+        var currentCountCells = Cells.Count;
         
         for (var i = currentCountCells; i < requiredCells; i++)
         {
             var videoCell = new VideoCellViewModel(i + 1);
-            Items.Add(videoCell);
+            Cells.Add(videoCell);
         }
         for (var i = currentCountCells; i > requiredCells; i--)
         {
-            var videoCell = Items[i-1];
-            Items.Remove(videoCell);
+            var videoCell = Cells[i-1];
+            Cells.Remove(videoCell);
             videoCell.Dispose();
         }
     }
 
     public void Dispose()
     {
-        while (Items.Count > 0)
+        while (Cells.Count > 0)
         {
-            var view = Items[0];
+            var view = Cells[0];
             view.Dispose();
-            Items.Remove(view);
+            Cells.Remove(view);
         }
     }
 }

@@ -27,17 +27,6 @@ public partial class GridButton : UserControl
     }
     
     public ObservableCollection<int> Items { get; } = [];
-
-    //first: rows, second: columns
-    public List<int> ButtonParams { get; } = [];
-    
-    public static readonly StyledProperty<ICommand> CommandProperty = AvaloniaProperty.Register<GridButton, ICommand>(
-        "Command");
-    public ICommand Command
-    {
-        get => GetValue(CommandProperty);
-        set => SetValue(CommandProperty, value);
-    }
     
     public GridButton()
     {
@@ -66,9 +55,5 @@ public partial class GridButton : UserControl
         {
             Items.Add(i);
         }
-        
-        ButtonParams.Clear();
-        ButtonParams.Add(RowCount);
-        ButtonParams.Add(ColumnCount);
     }
 }
