@@ -5,6 +5,7 @@
              xmlns:views="using:App.Views"
              xmlns:vm="using:App.ViewModels"
              xmlns:models="using:App.Models"
+             xmlns:behaviors="clr-namespace:App.Infrastructure.Behaviors"
              x:DataType="vm:VideoPanelPageViewModel"
              mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="250"
              x:Class="App.Views.VideoPanelPageView">
@@ -15,6 +16,8 @@
                 OpenCloseChannelSettingsCommand="{Binding $parent[UserControl].((vm:VideoPanelPageViewModel)DataContext).OpenCloseChannelSettingsCommand}"
                 IsMaximized="{Binding $parent[UserControl].((vm:VideoPanelPageViewModel)DataContext).VideoCellMaximized,
                                 Converter={x:Static ObjectConverters.IsNotNull}}"
+                behaviors:DoubleTappedBehavior.Command="{Binding $parent[UserControl].((vm:VideoPanelPageViewModel)DataContext).MaximizeMinimizeCellCommand}"
+                behaviors:DoubleTappedBehavior.CommandParameter="{Binding .}"
                 Margin="2"/>
         </DataTemplate>
     </UserControl.DataTemplates>
