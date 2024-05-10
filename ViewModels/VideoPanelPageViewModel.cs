@@ -101,7 +101,8 @@ public class VideoPanelPageViewModel : ViewModelBase, IDisposable
         else
         {
             //Reinit Cell
-            Cells[_settingsOpenedChannelIndex - 1] = new VideoCellViewModel(_settingsOpenedChannelIndex);
+            if(ChannelSettings is { SettingsChanged: true })
+                Cells[_settingsOpenedChannelIndex - 1] = new VideoCellViewModel(_settingsOpenedChannelIndex);
             
             ChannelSettings?.Dispose();
             ChannelSettings = null;
