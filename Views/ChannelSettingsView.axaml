@@ -1,23 +1,85 @@
-<UserControl xmlns="https://github.com/avaloniaui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="App.Views.ChannelSettingsView"
-             Background="{StaticResource BasicBackgroundBrush}"
-             Name="Root">
-    <Grid RowDefinitions="Auto, *">
-        <Border Grid.Row="0" Background="{StaticResource BasicBlackBrush}">
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                <Button Command="{Binding #Root.CloseCommand}"
-                        BorderThickness="0">
-                    <PathIcon Data="{StaticResource dismiss_circle_regular}"
-                              Height="16"
-                              Width="16"/>
+<UserControl
+    Background="{StaticResource BasicBackgroundBrush}"
+    BorderBrush="#666666"
+    BorderThickness="1"
+    Name="Root"
+    d:DesignHeight="450"
+    d:DesignWidth="500"
+    mc:Ignorable="d"
+    x:Class="App.Views.ChannelSettingsView"
+    x:DataType="vm:ChannelSettingsViewModel"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:vm="using:App.ViewModels"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Grid RowDefinitions="Auto, *, Auto">
+        <Border Background="{StaticResource BasicBlackBrush}" Grid.Row="0">
+            <!--  header  -->
+            <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
+                <Button BorderThickness="0" Command="{Binding #Root.CloseCommand}">
+                    <PathIcon
+                        Data="{StaticResource DismissCircleRegular}"
+                        Height="16"
+                        Width="16" />
                 </Button>
             </StackPanel>
         </Border>
-        <Grid Grid.Row="1"></Grid>
-        
+
+        <Border Grid.Row="1" Padding="12">
+            <Grid ColumnDefinitions="Auto, *" RowDefinitions="50, 50, 50, 50">
+                <Grid.Styles>
+                    <Style Selector="TextBlock">
+                        <Setter Property="VerticalAlignment" Value="Center" />
+                        <Setter Property="Margin" Value="0 0 14 0" />
+                    </Style>
+                    <Style Selector="TextBox">
+                        <Setter Property="Height" Value="30" />
+                        <Setter Property="VerticalAlignment" Value="Center" />
+                    </Style>
+                </Grid.Styles>
+
+                <TextBlock
+                    Grid.Column="0"
+                    Grid.Row="0"
+                    Text="Channel name:" />
+                <TextBox
+                    Grid.Column="1"
+                    Grid.Row="0"
+                    Text="{Binding ChannelName, Mode=TwoWay}" />
+
+                <TextBlock
+                    Grid.Column="0"
+                    Grid.Row="1"
+                    Text="Main stream URI:" />
+                <TextBox
+                    Grid.Column="1"
+                    Grid.Row="1"
+                    Text="{Binding MainStreamUri, Mode=TwoWay}" />
+
+                <TextBlock
+                    Grid.Column="0"
+                    Grid.Row="2"
+                    Text="Sub stream URI:" />
+                <TextBox Grid.Column="1" Grid.Row="2" />
+            </Grid>
+        </Border>
+
+        <Grid Grid.Row="2">
+            <StackPanel
+                HorizontalAlignment="Right"
+                Margin="4"
+                Orientation="Horizontal">
+                <Button Command="{Binding SaveSettingsCommand}" Padding="4,2">
+                    <StackPanel Orientation="Horizontal">
+                        <PathIcon Data="{StaticResource SaveRegular}" VerticalAlignment="Center" />
+                        <TextBlock
+                            Margin="4"
+                            Text="Save"
+                            VerticalAlignment="Center" />
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+        </Grid>
     </Grid>
 </UserControl>

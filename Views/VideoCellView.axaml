@@ -1,32 +1,36 @@
-<UserControl xmlns="https://github.com/avaloniaui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:vm="using:App.ViewModels"
-             xmlns:views="using:App.Views"
-             x:DataType="vm:VideoCellViewModel"
-             mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="250"
-             x:Class="App.Views.VideoCellView"
-             Name="Root">
+<UserControl
+    Name="Root"
+    d:DesignHeight="250"
+    d:DesignWidth="400"
+    mc:Ignorable="d"
+    x:Class="App.Views.VideoCellView"
+    x:DataType="vm:VideoCellViewModel"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:views="using:App.Views"
+    xmlns:vm="using:App.ViewModels"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <UserControl.Styles>
         <Style Selector="Border.MainBorder">
-            <Setter Property="BorderBrush" Value="#666666"></Setter>
+            <Setter Property="BorderBrush" Value="#666666" />
         </Style>
         <Style Selector="Border.MainBorder:pointerover">
-            <Setter Property="BorderBrush" Value="#888888"></Setter>
+            <Setter Property="BorderBrush" Value="#888888" />
         </Style>
-        
+
         <Style Selector="Grid.showme">
             <Style.Animations>
-                <Animation Duration="0:0:0.4"
-                           FillMode="Forward"
-                           Easing="SineEaseInOut">
+                <Animation
+                    Duration="0:0:0.4"
+                    Easing="SineEaseInOut"
+                    FillMode="Forward">
                     <KeyFrame Cue="0%">
-                        <Setter Property="IsVisible" Value="true"/>
+                        <Setter Property="IsVisible" Value="true" />
                     </KeyFrame>
                     <KeyFrame Cue="100%">
-                        <Setter Property="TranslateTransform.Y" Value="0"/>
-                        <Setter Property="IsVisible" Value="true"/>
+                        <Setter Property="TranslateTransform.Y" Value="0" />
+                        <Setter Property="IsVisible" Value="true" />
                     </KeyFrame>
                 </Animation>
             </Style.Animations>
@@ -34,115 +38,118 @@
 
         <Style Selector="Grid.hidemeTop">
             <Style.Animations>
-                <Animation Duration="0:0:0.4"
-                           FillMode="Forward"
-                           Easing="SineEaseInOut">
-                    <KeyFrame Cue="0%">
-                    </KeyFrame>
+                <Animation
+                    Duration="0:0:0.4"
+                    Easing="SineEaseInOut"
+                    FillMode="Forward">
+                    <KeyFrame Cue="0%" />
                     <KeyFrame Cue="100%">
-                        <Setter Property="TranslateTransform.Y" Value="-24"/>
-                        <Setter Property="IsVisible" Value="false"/>
+                        <Setter Property="TranslateTransform.Y" Value="-24" />
+                        <Setter Property="IsVisible" Value="false" />
                     </KeyFrame>
                 </Animation>
             </Style.Animations>
         </Style>
         <Style Selector="Grid.hidemeBottom">
             <Style.Animations>
-                <Animation Duration="0:0:0.5"
-                           FillMode="Forward"
-                           Easing="SineEaseInOut">
-                    <KeyFrame Cue="0%">
-                    </KeyFrame>
+                <Animation
+                    Duration="0:0:0.5"
+                    Easing="SineEaseInOut"
+                    FillMode="Forward">
+                    <KeyFrame Cue="0%" />
                     <KeyFrame Cue="100%">
-                        <Setter Property="TranslateTransform.Y" Value="24"/>
-                        <Setter Property="IsVisible" Value="false"/>
+                        <Setter Property="TranslateTransform.Y" Value="24" />
+                        <Setter Property="IsVisible" Value="false" />
                     </KeyFrame>
                 </Animation>
             </Style.Animations>
         </Style>
     </UserControl.Styles>
-    <Border BorderThickness="1"
-            Classes="MainBorder"
-            Name="MainBorder"
-            Background="#2d2d2d">
-       <Grid>
-           
-            <views:VideoPlayerView DataContext="{Binding VideoPlayerViewModel}"/>
-            <!-- Top bar -->
-            <Grid VerticalAlignment="Top"
-                  Background="{StaticResource TranslucentGrayBrush}"
-                  ColumnDefinitions="*, 6*, *"
-                  Height="24"
-                  Classes.showme="{CompiledBinding #MainBorder.IsPointerOver}"
-                  Classes.hidemeTop="{CompiledBinding !#MainBorder.IsPointerOver}">
-                
+    <Border
+        Background="#2d2d2d"
+        BorderThickness="1"
+        Classes="MainBorder"
+        Name="MainBorder">
+        <Grid>
+
+            <views:VideoPlayerView DataContext="{Binding VideoPlayerViewModel}" />
+            <!--  Top bar  -->
+            <Grid
+                Background="{StaticResource TranslucentGrayBrush}"
+                Classes.hidemeTop="{CompiledBinding !#MainBorder.IsPointerOver}"
+                Classes.showme="{CompiledBinding #MainBorder.IsPointerOver}"
+                ColumnDefinitions="*, 6*, *"
+                Height="24"
+                VerticalAlignment="Top">
+
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="{Binding Index}"
-                               FontSize="12"
-                               VerticalAlignment="Center"
-                               Margin="6 0 0 0"/>
-                    <TextBlock Text="Channel Name"
-                               FontSize="12"
-                               VerticalAlignment="Center"
-                               Margin="6 0 0 0"/>
+                    <TextBlock
+                        FontSize="12"
+                        Margin="6,0,0,0"
+                        Text="{Binding ChannelName}"
+                        VerticalAlignment="Center" />
                 </StackPanel>
             </Grid>
-            
-            <!-- Bottom bar -->
-            <Grid VerticalAlignment="Bottom"
-                  Background="{StaticResource TranslucentGrayBrush}"
-                  ColumnDefinitions="*, 6*, *"
-                  Height="24"
-                  Classes.showme="{CompiledBinding #MainBorder.IsPointerOver}"
-                  Classes.hidemeBottom="{CompiledBinding !#MainBorder.IsPointerOver}">
+
+            <!--  Bottom bar  -->
+            <Grid
+                Background="{StaticResource TranslucentGrayBrush}"
+                Classes.hidemeBottom="{CompiledBinding !#MainBorder.IsPointerOver}"
+                Classes.showme="{CompiledBinding #MainBorder.IsPointerOver}"
+                ColumnDefinitions="*, 6*, *"
+                Height="24"
+                VerticalAlignment="Bottom">
                 <Grid.Styles>
                     <Style Selector="Button">
-                        <Setter Property="BorderThickness" Value="0"/>
-                        <Setter Property="Height" Value="24"/>
-                        <Setter Property="Width" Value="24"/>
-                        <Setter Property="Background" Value="Transparent"/>
+                        <Setter Property="BorderThickness" Value="0" />
+                        <Setter Property="Height" Value="24" />
+                        <Setter Property="Width" Value="24" />
+                        <Setter Property="Background" Value="Transparent" />
                     </Style>
                     <Style Selector="PathIcon">
-                        <Setter Property="Height" Value="14"/>
-                        <Setter Property="Width" Value="14"/>
+                        <Setter Property="Height" Value="14" />
+                        <Setter Property="Width" Value="14" />
                     </Style>
                 </Grid.Styles>
-                <StackPanel Grid.Column="0" Orientation="Horizontal"
-                            HorizontalAlignment="Left">
-                    <Button Command="{Binding #Root.OpenCloseChannelSettingsCommand}"
-                            CommandParameter="{Binding .}">
-                        <PathIcon Data="{StaticResource settings_regular}"/>
+                <StackPanel
+                    Grid.Column="0"
+                    HorizontalAlignment="Left"
+                    Orientation="Horizontal">
+                    <Button Command="{Binding #Root.OpenCloseChannelSettingsCommand}" CommandParameter="{Binding .}">
+                        <PathIcon Data="{StaticResource SettingsRegular}" />
                     </Button>
                 </StackPanel>
-            
-               <StackPanel Grid.Column="1" Orientation="Horizontal"
-                           HorizontalAlignment="Center">
-                   <Button Command="{Binding VideoPlayerViewModel.StartCommand}">
-                       <PathIcon Data="{StaticResource play_regular}"/>
-                   </Button>
-                   <Button Command="{Binding VideoPlayerViewModel.StopCommand}">
-                       <PathIcon Data="{StaticResource stop_regular}"/>
-                   </Button>
-               </StackPanel>
-            
-               <StackPanel Grid.Column="2" Orientation="Horizontal"
-                           HorizontalAlignment="Right">
-                   <Button Command="{Binding #Root.MaximizeMinimizeCellCommand}"
-                           CommandParameter="{Binding .}">
-                       <PathIcon Classes.IsMaximized="{Binding  #Root.IsMaximized}"
-                                 Classes.NotMaximized="{Binding !#Root.IsMaximized}"/>
-                       <Button.Styles>
-                           <Style Selector="PathIcon.IsMaximized">
-                               <Setter Property="Data" Value="{StaticResource arrow_minimize_regular}"/>
-                           </Style>
-                           <Style Selector="PathIcon.NotMaximized">
-                               <Setter Property="Data" Value="{StaticResource arrow_maximize_regular}"/>
-                           </Style>
-                       </Button.Styles>
-                   </Button>
-               </StackPanel>
+
+                <StackPanel
+                    Grid.Column="1"
+                    HorizontalAlignment="Center"
+                    Orientation="Horizontal">
+                    <Button Command="{Binding VideoPlayerViewModel.StartCommand}">
+                        <PathIcon Data="{StaticResource PlayRegular}" />
+                    </Button>
+                    <Button Command="{Binding VideoPlayerViewModel.StopCommand}">
+                        <PathIcon Data="{StaticResource StopRegular}" />
+                    </Button>
+                </StackPanel>
+
+                <StackPanel
+                    Grid.Column="2"
+                    HorizontalAlignment="Right"
+                    Orientation="Horizontal">
+                    <Button Command="{Binding #Root.MaximizeMinimizeCellCommand}" CommandParameter="{Binding .}">
+                        <PathIcon Classes.IsMaximized="{Binding #Root.IsMaximized}" Classes.NotMaximized="{Binding !#Root.IsMaximized}" />
+                        <Button.Styles>
+                            <Style Selector="PathIcon.IsMaximized">
+                                <Setter Property="Data" Value="{StaticResource ArrowMinimizeRegular}" />
+                            </Style>
+                            <Style Selector="PathIcon.NotMaximized">
+                                <Setter Property="Data" Value="{StaticResource ArrowMaximizeRegular}" />
+                            </Style>
+                        </Button.Styles>
+                    </Button>
+                </StackPanel>
             </Grid>
-            
-       </Grid>
+
+        </Grid>
     </Border>
 </UserControl>

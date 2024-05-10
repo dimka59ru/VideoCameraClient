@@ -25,8 +25,8 @@ public class MainWindowViewModel : ViewModelBase
     
     public ObservableCollection<ListItemTemplate> Items { get; } =
     [
-        new ListItemTemplate(typeof(VideoPanelPageViewModel), "grid_regular"),
-        new ListItemTemplate(typeof(SettingsPageViewModel), "settings_regular")
+        new ListItemTemplate(typeof(VideoPanelPageViewModel), "GridRegular"),
+        new ListItemTemplate(typeof(SettingsPageViewModel), "SettingsRegular")
     ];
 
     public MainWindowViewModel()

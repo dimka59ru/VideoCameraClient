@@ -14,6 +14,7 @@ public class VideoPanelPageViewModel : ViewModelBase, IDisposable
     private VideoCellViewModel? _videoCellMaximized;
     private bool _isChannelSettingsOpened;
     private int _selectedPanelIndex;
+    private ChannelSettingsViewModel? _channelSettings;
 
     public int ColumnCount
     {
@@ -31,6 +32,12 @@ public class VideoPanelPageViewModel : ViewModelBase, IDisposable
     {
         get => _videoCellMaximized;
         set => this.RaiseAndSetIfChanged(ref _videoCellMaximized, value);
+    }
+    
+    public ChannelSettingsViewModel? ChannelSettings
+    {
+        get => _channelSettings;
+        set => this.RaiseAndSetIfChanged(ref _channelSettings, value);
     }
     
     public bool IsChannelSettingsOpened
@@ -79,10 +86,26 @@ public class VideoPanelPageViewModel : ViewModelBase, IDisposable
         UserSettings.Instance.LastOpenPanelIndex = SelectedPanelIndex;
         UserSettings.Save();
     }
-        
-    private void OpenCloseChannelSettings(VideoCellViewModel obj)
+
+
+    private int _settingsOpenedChannelIndex;
+    private void OpenCloseChannelSettings(VideoCellViewModel cell)
     {
         IsChannelSettingsOpened = !IsChannelSettingsOpened;
+
+        if (IsChannelSettingsOpened)
+        {
+            _settingsOpenedChannelIndex = cell.Index;
+            ChannelSettings = new ChannelSettingsViewModel(cell.Index);
+        }
+        else
+        {
+            //Reinit Cell
+            Cells[_settingsOpenedChannelIndex - 1] = new VideoCellViewModel(_settingsOpenedChannelIndex);
+            
+            ChannelSettings?.Dispose();
+            ChannelSettings = null;
+        }
     }
 
     private void MaximizeMinimizeCell(VideoCellViewModel videoCell)

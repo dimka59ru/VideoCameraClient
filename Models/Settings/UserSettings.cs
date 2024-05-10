@@ -5,12 +5,12 @@ namespace App.Models.Settings;
 
 public class UserSettings : SettingsManager<UserSettings>
 {
-    private Dictionary<int, VideoStreamSourceSettings>? _videoStreamSourceSettingsMap;
+    private Dictionary<int, ChannelSettings>? _channelSettingsMap;
     public int LastOpenPanelIndex { get; set; }
 
-    public Dictionary<int, VideoStreamSourceSettings> VideoStreamSourceSettingsMap
+    public Dictionary<int, ChannelSettings> ChannelSettingsMap
     {
-        get => _videoStreamSourceSettingsMap ??= new Dictionary<int, VideoStreamSourceSettings>();
-        set => _videoStreamSourceSettingsMap = value;
+        get => _channelSettingsMap ??= new Dictionary<int, ChannelSettings>();
+        set => _channelSettingsMap = value;
     }
 }

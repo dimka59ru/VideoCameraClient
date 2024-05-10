@@ -2,6 +2,7 @@ using System;
 using App.Models;
 using App.Models.Settings;
 using App.VideoSources;
+using ReactiveUI;
 
 namespace App.ViewModels;
 
@@ -10,10 +11,17 @@ public class VideoCellViewModel : ViewModelBase, IDisposable
     public int Index { get; }
     public VideoPlayerViewModel? VideoPlayerViewModel { get; }
     
+    private string? _channelName;
+    public string? ChannelName
+    {
+        get => _channelName;
+        set => this.RaiseAndSetIfChanged(ref _channelName, value);
+    }
+    
     public VideoCellViewModel(int index)
     {
         UserSettings.Load();
-        var videoStreamSourceSettingsMap = UserSettings.Instance.VideoStreamSourceSettingsMap;
+        var channelSettingsMap = UserSettings.Instance.ChannelSettingsMap;
         Index = index;
         
         //IVideoSource vs = new RandomImagesVideoSource();
@@ -54,12 +62,16 @@ public class VideoCellViewModel : ViewModelBase, IDisposable
         //         break;
         // }
        
-        if (videoStreamSourceSettingsMap.TryGetValue(index, out var value))
+        if (channelSettingsMap.TryGetValue(index, out var channelSettings))
         {
-            var uri = value.MainStreamUri;
-            if (uri == null) return;
-            var vs = new VideoStreamSource(uri.ToString());
-            VideoPlayerViewModel = new VideoPlayerViewModel(vs, new ChannelInfo(index, index.ToString()));
+            var uri = channelSettings.MainStreamUri;
+            if (uri != null)
+            {
+                var vs = new VideoStreamSource(uri.ToString());
+                VideoPlayerViewModel = new VideoPlayerViewModel(vs, new ChannelInfo(index, index.ToString()));
+            }
+
+            ChannelName = channelSettings.Name;
         }
     }
 
