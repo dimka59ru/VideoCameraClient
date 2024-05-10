@@ -5,27 +5,9 @@
              mc:Ignorable="d" d:DesignWidth="48" d:DesignHeight="48"
              x:Class="App.Views.GridButton"
              x:Name="Root"
-             Margin="4">
-    <Border BorderBrush="White" 
-            BorderThickness="1">
-        <ItemsControl ItemsSource="{Binding Items, ElementName=Root}">
-            <!-- This panel will be used to hold the items -->
-            <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <UniformGrid Rows="{Binding RowCount, ElementName=Root}" 
-                                 Columns="{Binding ColumnCount, ElementName=Root}" 
-                                 Margin="0"/>
-                </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
-
-            <!-- Each item will be drawn using this template -->
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <Border BorderBrush="White" 
-                            BorderThickness="0 0 1 1"
-                            Margin="0 0 -1 -1"/>
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-        </ItemsControl>
+             Margin="0">
+    <Border BorderThickness="0 0 1 1" BorderBrush="White"  >
+        <Grid Name="MainGrid"
+              Background="White"></Grid>
     </Border>
 </UserControl>

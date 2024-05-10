@@ -1,8 +1,7 @@
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Windows.Input;
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Shapes;
+using Avalonia.Media;
 
 namespace App.Views;
 
@@ -25,12 +24,16 @@ public partial class GridButton : UserControl
         get => _rowCount;
         set => SetAndRaise(RowCountProperty, ref _rowCount, value);
     }
-    
-    public ObservableCollection<int> Items { get; } = [];
+
+    private readonly IBrush _initColor = new SolidColorBrush(Colors.Black);
     
     public GridButton()
     {
         InitializeComponent();
+        var foundColor = Application.Current!.TryFindResource("BasicBlackBrush", this.ActualThemeVariant, out var result1);
+        if (Application.Current!.TryFindResource("BasicBlackBrush", this.ActualThemeVariant, out var result)
+            && result is IBrush brush)
+            _initColor = brush;
     }
     
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
@@ -38,22 +41,44 @@ public partial class GridButton : UserControl
         base.OnPropertyChanged(change);
         if (change.Property == ColumnCountProperty)
         {
-            AddItems();
+            InitGrid();
         }
         else if (change.Property == RowCountProperty)
         {
-            AddItems();
+            InitGrid();
         }
     }
 
-    private void AddItems()
+    private void InitGrid()
     {
         if (ColumnCount == 0 || RowCount == 0)
             return;
-            
-        for (var i = 0; i < ColumnCount * RowCount; i++)
+        
+        for (var i = 0; i < RowCount; i++)
         {
-            Items.Add(i);
+            MainGrid.RowDefinitions.Add(new RowDefinition(GridLength.Star));
+        }
+        
+        for (var j = 0; j < ColumnCount; j++)
+        {
+            MainGrid.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Star));
+        }
+        
+        for (var i = 0; i < RowCount; i++)
+        {
+            for (var j = 0; j < ColumnCount; j++)
+            {
+                var child = new Rectangle()
+                {
+                    Fill = _initColor,
+                    Stroke = Brushes.Aqua,
+                    Margin = new Thickness(1 ,1 ,0, 0)
+                };
+                
+                MainGrid.Children.Add(child);
+                Grid.SetRow(child, i);
+                Grid.SetColumn(child, j);
+            }
         }
     }
 }
