@@ -26,7 +26,7 @@ public abstract class SettingsManager<T> where T : SettingsManager<T>, new()
 
     public static void Save()
     {
-        string json = JsonSerializer.Serialize(Instance);
+        string json = JsonSerializer.Serialize(Instance, new JsonSerializerOptions { WriteIndented = true });
         Directory.CreateDirectory(Path.GetDirectoryName(_filePath));
         File.WriteAllText(_filePath, json);
     }

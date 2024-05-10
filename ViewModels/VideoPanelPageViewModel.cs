@@ -2,6 +2,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.Reactive;
 using App.Models;
+using App.Models.Settings;
 using ReactiveUI;
 
 namespace App.ViewModels;
