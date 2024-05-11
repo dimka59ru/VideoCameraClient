@@ -15,12 +15,12 @@
     <UserControl.DataTemplates>
         <DataTemplate DataType="{x:Type vm:VideoCellViewModel}">
             <views:VideoCellView
-                IsMaximized="{Binding $parent[UserControl].((vm:VideoPanelPageViewModel)DataContext).VideoCellMaximized, Converter={x:Static ObjectConverters.IsNotNull}}"
+                IsMaximized="{Binding $parent[UserControl].((vm:VideoPanelPageViewModel)DataContext).IsCellMaximized}"
                 Margin="0"
                 MaximizeMinimizeCellCommand="{Binding $parent[UserControl].((vm:VideoPanelPageViewModel)DataContext).MaximizeMinimizeCellCommand}"
                 OpenCloseChannelSettingsCommand="{Binding $parent[UserControl].((vm:VideoPanelPageViewModel)DataContext).OpenCloseChannelSettingsCommand}"
                 behaviors:DoubleTappedBehavior.Command="{Binding $parent[UserControl].((vm:VideoPanelPageViewModel)DataContext).MaximizeMinimizeCellCommand}"
-                behaviors:DoubleTappedBehavior.CommandParameter="{Binding .}" />
+                behaviors:DoubleTappedBehavior.CommandParameter="{Binding Index}" />
         </DataTemplate>
 
         <DataTemplate DataType="{x:Type vm:ChannelSettingsViewModel}">
@@ -71,13 +71,18 @@
                             <UniformGrid Columns="{Binding ColumnCount}" Rows="{Binding RowCount}" />
                         </ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>
+                    <ItemsControl.Styles>
+                        <Style Selector="ItemsControl &gt; ContentPresenter">
+                            <Setter Property="Margin" Value="1" />
+                        </Style>
+                    </ItemsControl.Styles>
                 </ItemsControl>
             </Border>
         </Grid>
 
         <Grid
             Grid.Row="1"
-            IsVisible="{Binding VideoCellMaximized, Converter={x:Static ObjectConverters.IsNotNull}}"
+            IsVisible="{Binding IsCellMaximized}"
             Margin="2">
             <ContentControl Content="{Binding VideoCellMaximized}" />
         </Grid>

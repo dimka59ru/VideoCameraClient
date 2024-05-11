@@ -136,7 +136,7 @@
                     Grid.Column="2"
                     HorizontalAlignment="Right"
                     Orientation="Horizontal">
-                    <Button Command="{Binding #Root.MaximizeMinimizeCellCommand}" CommandParameter="{Binding .}">
+                    <Button Command="{Binding #Root.MaximizeMinimizeCellCommand}" CommandParameter="{Binding Index}">
                         <PathIcon Classes.IsMaximized="{Binding #Root.IsMaximized}" Classes.NotMaximized="{Binding !#Root.IsMaximized}" />
                         <Button.Styles>
                             <Style Selector="PathIcon.IsMaximized">

@@ -10,49 +10,55 @@ namespace App.ViewModels;
 public class VideoPanelPageViewModel : ViewModelBase, IDisposable
 {
     private int _columnCount;
-    private int _rowCount;
-    private VideoCellViewModel? _videoCellMaximized;
-    private int _selectedCellIndex;
-    private bool _isChannelSettingsOpened;
-    private int _selectedPanelIndex;
-    private ChannelSettingsViewModel? _channelSettings;
-
     public int ColumnCount
     {
         get => _columnCount;
         set => this.RaiseAndSetIfChanged(ref _columnCount, value);
     }
     
+    private int _rowCount;
     public int RowCount
     {
         get => _rowCount;
         set => this.RaiseAndSetIfChanged(ref _rowCount, value);
     }
     
+    private VideoCellViewModel? _videoCellMaximized;
     public VideoCellViewModel? VideoCellMaximized
     {
         get => _videoCellMaximized;
         set => this.RaiseAndSetIfChanged(ref _videoCellMaximized, value);
     }
     
+    private int _selectedCellIndex;
     public int SelectedCellIndex
     {
         get => _selectedCellIndex;
         set => this.RaiseAndSetIfChanged(ref _selectedCellIndex, value);
     }
     
+    private ChannelSettingsViewModel? _channelSettings;
     public ChannelSettingsViewModel? ChannelSettings
     {
         get => _channelSettings;
         set => this.RaiseAndSetIfChanged(ref _channelSettings, value);
     }
     
+    private bool _isChannelSettingsOpened;
     public bool IsChannelSettingsOpened
     {
         get => _isChannelSettingsOpened;
         set => this.RaiseAndSetIfChanged(ref _isChannelSettingsOpened, value);
     }
     
+    private bool _isCellMaximized;
+    public bool IsCellMaximized
+    {
+        get => _isCellMaximized;
+        set => this.RaiseAndSetIfChanged(ref _isCellMaximized, value);
+    }
+    
+    private int _selectedPanelIndex;
     public int SelectedPanelIndex
     {
         get => _selectedPanelIndex;
@@ -69,7 +75,7 @@ public class VideoPanelPageViewModel : ViewModelBase, IDisposable
         new PanelParams(3, 3),
     ];
     
-    public ReactiveCommand<VideoCellViewModel, Unit> MaximizeMinimizeCellCommand { get; }
+    public ReactiveCommand<int, Unit> MaximizeMinimizeCellCommand { get; }
     public ReactiveCommand<int, Unit> OpenCloseChannelSettingsCommand { get; }
 
     
@@ -84,8 +90,19 @@ public class VideoPanelPageViewModel : ViewModelBase, IDisposable
         this.WhenAnyValue(x => x.IsChannelSettingsOpened)
             .Subscribe(x => IsChannelSettingsOpenedChanged());
         
-        MaximizeMinimizeCellCommand = ReactiveCommand.Create<VideoCellViewModel>(MaximizeMinimizeCell);
+        this.WhenAnyValue(x => x.IsCellMaximized)
+            .Subscribe(x => IsCellMaximizedChanged());
+        
+        MaximizeMinimizeCellCommand = ReactiveCommand.Create<int>(MaximizeMinimizeCell);
         OpenCloseChannelSettingsCommand = ReactiveCommand.Create<int>(OpenCloseChannelSettings);
+    }
+
+    private void IsCellMaximizedChanged()
+    {
+        if (IsCellMaximized)
+        {
+            VideoCellMaximized = Cells[SelectedCellIndex];
+        }
     }
 
     private void OnSelectedPanelIndexChanged(int index)
@@ -110,6 +127,12 @@ public class VideoPanelPageViewModel : ViewModelBase, IDisposable
             {
                 var oldCell = Cells[SelectedCellIndex];
                 Cells[SelectedCellIndex] = new VideoCellViewModel(SelectedCellIndex);
+
+                if (IsCellMaximized)
+                {
+                    VideoCellMaximized = Cells[SelectedCellIndex];
+                }
+                
                 oldCell.Dispose();
             }
             
@@ -124,9 +147,10 @@ public class VideoPanelPageViewModel : ViewModelBase, IDisposable
         IsChannelSettingsOpened = !IsChannelSettingsOpened;
     }
 
-    private void MaximizeMinimizeCell(VideoCellViewModel videoCell)
+    private void MaximizeMinimizeCell(int cellIndex)
     {
-        VideoCellMaximized = VideoCellMaximized == null ? videoCell : null;
+        SelectedCellIndex = cellIndex;
+        IsCellMaximized = !IsCellMaximized;
         // TODO Нужно по хорошему остановить остальные ячейки.
     }
 
