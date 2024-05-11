@@ -115,7 +115,7 @@
                     Grid.Column="0"
                     HorizontalAlignment="Left"
                     Orientation="Horizontal">
-                    <Button Command="{Binding #Root.OpenCloseChannelSettingsCommand}" CommandParameter="{Binding .}">
+                    <Button Command="{Binding #Root.OpenCloseChannelSettingsCommand}" CommandParameter="{Binding Index}">
                         <PathIcon Data="{StaticResource SettingsRegular}" />
                     </Button>
                 </StackPanel>

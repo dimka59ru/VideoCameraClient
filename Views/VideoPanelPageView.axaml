@@ -16,18 +16,22 @@
         <DataTemplate DataType="{x:Type vm:VideoCellViewModel}">
             <views:VideoCellView
                 IsMaximized="{Binding $parent[UserControl].((vm:VideoPanelPageViewModel)DataContext).VideoCellMaximized, Converter={x:Static ObjectConverters.IsNotNull}}"
-                Margin="2"
+                Margin="0"
                 MaximizeMinimizeCellCommand="{Binding $parent[UserControl].((vm:VideoPanelPageViewModel)DataContext).MaximizeMinimizeCellCommand}"
                 OpenCloseChannelSettingsCommand="{Binding $parent[UserControl].((vm:VideoPanelPageViewModel)DataContext).OpenCloseChannelSettingsCommand}"
                 behaviors:DoubleTappedBehavior.Command="{Binding $parent[UserControl].((vm:VideoPanelPageViewModel)DataContext).MaximizeMinimizeCellCommand}"
                 behaviors:DoubleTappedBehavior.CommandParameter="{Binding .}" />
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type vm:ChannelSettingsViewModel}">
+            <views:ChannelSettingsView CloseCommand="{Binding $parent[UserControl].((vm:VideoPanelPageViewModel)DataContext).OpenCloseChannelSettingsCommand}" />
         </DataTemplate>
     </UserControl.DataTemplates>
 
     <Grid RowDefinitions="Auto, *">
         <ListBox
             Grid.Row="0"
-            Height="54"
+            Height="50"
             HorizontalAlignment="Center"
             ItemsSource="{Binding Panels}"
             Margin="4,4,4,0"
@@ -51,6 +55,11 @@
                     <StackPanel Orientation="Horizontal" Spacing="0" />
                 </ItemsPanelTemplate>
             </ListBox.ItemsPanel>
+            <ListBox.Styles>
+                <Style Selector="ListBoxItem">
+                    <Setter Property="Padding" Value="4" />
+                </Style>
+            </ListBox.Styles>
         </ListBox>
 
         <!--  Video Panel  -->
@@ -78,9 +87,8 @@
                 Background="{StaticResource TranslucentGrayBrush}"
                 ColumnDefinitions="*, 10*, *"
                 RowDefinitions="*, 10*, *">
-                <views:ChannelSettingsView
-                    CloseCommand="{Binding $parent[UserControl].((vm:VideoPanelPageViewModel)DataContext).OpenCloseChannelSettingsCommand}"
-                    DataContext="{Binding ChannelSettings}"
+                <ContentControl
+                    Content="{Binding ChannelSettings}"
                     Grid.Column="1"
                     Grid.Row="1" />
             </Grid>

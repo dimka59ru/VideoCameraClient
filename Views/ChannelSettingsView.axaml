@@ -17,7 +17,10 @@
         <Border Background="{StaticResource BasicBlackBrush}" Grid.Row="0">
             <!--  header  -->
             <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
-                <Button BorderThickness="0" Command="{Binding #Root.CloseCommand}">
+                <Button
+                    BorderThickness="0"
+                    Command="{Binding #Root.CloseCommand}"
+                    CommandParameter="{Binding ChannelIndex}">
                     <PathIcon
                         Data="{StaticResource DismissCircleRegular}"
                         Height="16"

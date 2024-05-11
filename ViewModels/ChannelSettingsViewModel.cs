@@ -9,7 +9,6 @@ namespace App.ViewModels;
 
 public class ChannelSettingsViewModel : ViewModelBase, IDisposable
 {
-    private readonly int _channelIndex;
     private readonly Dictionary<int, ChannelSettings> _channelSettingsMap;
     private ChannelSettings _loadedChannelSettings;
 
@@ -34,6 +33,13 @@ public class ChannelSettingsViewModel : ViewModelBase, IDisposable
         set => this.RaiseAndSetIfChanged(ref _propertiesChanged, value);
     }
     
+    private int _channelIndex;
+    public int ChannelIndex
+    {
+        get => _channelIndex;
+        set => this.RaiseAndSetIfChanged(ref _channelIndex, value);
+    }
+
     private bool _settingsChanged;
     public bool SettingsChanged
     {
@@ -45,7 +51,7 @@ public class ChannelSettingsViewModel : ViewModelBase, IDisposable
     
     public ChannelSettingsViewModel(int channelIndex)
     {
-        _channelIndex = channelIndex;
+        ChannelIndex = channelIndex;
         ChannelName = channelIndex.ToString();
 
         var canSaveSettingsCommandExecute = this.WhenAnyValue(
@@ -90,8 +96,8 @@ public class ChannelSettingsViewModel : ViewModelBase, IDisposable
     private void OnSaveSettings()
     {
         var streamUri = Uri.TryCreate(MainStreamUri, UriKind.Absolute, out var uri) ? uri : null;
-        _channelSettingsMap[_channelIndex] = new ChannelSettings(ChannelName, streamUri, null, null);
-        _loadedChannelSettings = _channelSettingsMap[_channelIndex];
+        _channelSettingsMap[ChannelIndex] = new ChannelSettings(ChannelName, streamUri, null, null);
+        _loadedChannelSettings = _channelSettingsMap[ChannelIndex];
         CheckIfPropertiesChanged();
         
         UserSettings.Save();

@@ -12,6 +12,7 @@ public class VideoPanelPageViewModel : ViewModelBase, IDisposable
     private int _columnCount;
     private int _rowCount;
     private VideoCellViewModel? _videoCellMaximized;
+    private int _selectedCellIndex;
     private bool _isChannelSettingsOpened;
     private int _selectedPanelIndex;
     private ChannelSettingsViewModel? _channelSettings;
@@ -32,6 +33,12 @@ public class VideoPanelPageViewModel : ViewModelBase, IDisposable
     {
         get => _videoCellMaximized;
         set => this.RaiseAndSetIfChanged(ref _videoCellMaximized, value);
+    }
+    
+    public int SelectedCellIndex
+    {
+        get => _selectedCellIndex;
+        set => this.RaiseAndSetIfChanged(ref _selectedCellIndex, value);
     }
     
     public ChannelSettingsViewModel? ChannelSettings
@@ -63,7 +70,7 @@ public class VideoPanelPageViewModel : ViewModelBase, IDisposable
     ];
     
     public ReactiveCommand<VideoCellViewModel, Unit> MaximizeMinimizeCellCommand { get; }
-    public ReactiveCommand<VideoCellViewModel, Unit> OpenCloseChannelSettingsCommand { get; }
+    public ReactiveCommand<int, Unit> OpenCloseChannelSettingsCommand { get; }
 
     
     public VideoPanelPageViewModel()
@@ -74,8 +81,11 @@ public class VideoPanelPageViewModel : ViewModelBase, IDisposable
         this.WhenAnyValue(x => x.SelectedPanelIndex)
             .Subscribe(OnSelectedPanelIndexChanged);
         
+        this.WhenAnyValue(x => x.IsChannelSettingsOpened)
+            .Subscribe(x => IsChannelSettingsOpenedChanged());
+        
         MaximizeMinimizeCellCommand = ReactiveCommand.Create<VideoCellViewModel>(MaximizeMinimizeCell);
-        OpenCloseChannelSettingsCommand = ReactiveCommand.Create<VideoCellViewModel>(OpenCloseChannelSettings);
+        OpenCloseChannelSettingsCommand = ReactiveCommand.Create<int>(OpenCloseChannelSettings);
     }
 
     private void OnSelectedPanelIndexChanged(int index)
@@ -86,27 +96,32 @@ public class VideoPanelPageViewModel : ViewModelBase, IDisposable
         UserSettings.Instance.LastOpenPanelIndex = SelectedPanelIndex;
         UserSettings.Save();
     }
-
-
-    private int _settingsOpenedChannelIndex;
-    private void OpenCloseChannelSettings(VideoCellViewModel cell)
+    
+    private void IsChannelSettingsOpenedChanged()
     {
-        IsChannelSettingsOpened = !IsChannelSettingsOpened;
-
         if (IsChannelSettingsOpened)
         {
-            _settingsOpenedChannelIndex = cell.Index;
-            ChannelSettings = new ChannelSettingsViewModel(cell.Index);
+            ChannelSettings = new ChannelSettingsViewModel(SelectedCellIndex);
         }
         else
         {
             //Reinit Cell
-            if(ChannelSettings is { SettingsChanged: true })
-                Cells[_settingsOpenedChannelIndex - 1] = new VideoCellViewModel(_settingsOpenedChannelIndex);
+            if (ChannelSettings is { SettingsChanged: true })
+            {
+                var oldCell = Cells[SelectedCellIndex];
+                Cells[SelectedCellIndex] = new VideoCellViewModel(SelectedCellIndex);
+                oldCell.Dispose();
+            }
             
             ChannelSettings?.Dispose();
             ChannelSettings = null;
         }
+    }
+    
+    private void OpenCloseChannelSettings(int cellIndex)
+    {
+        SelectedCellIndex = cellIndex;
+        IsChannelSettingsOpened = !IsChannelSettingsOpened;
     }
 
     private void MaximizeMinimizeCell(VideoCellViewModel videoCell)
@@ -115,10 +130,6 @@ public class VideoPanelPageViewModel : ViewModelBase, IDisposable
         // TODO Нужно по хорошему остановить остальные ячейки.
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="panelParams">first: rows, second: columns</param>
     private void UpdateVideoPanel(PanelParams value)
     {
         RowCount = value.RowCount;
@@ -129,7 +140,7 @@ public class VideoPanelPageViewModel : ViewModelBase, IDisposable
         
         for (var i = currentCountCells; i < requiredCells; i++)
         {
-            var videoCell = new VideoCellViewModel(i + 1);
+            var videoCell = new VideoCellViewModel(i);
             Cells.Add(videoCell);
         }
         for (var i = currentCountCells; i > requiredCells; i--)
