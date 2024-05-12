@@ -22,8 +22,8 @@ public class VideoSourceWatchdog : IObserver<IDecodedVideoFrame>, IDisposable
         _stateTimer = new Timer(OnTimer, null, (int)checkPeriod.TotalMilliseconds, Timeout.Infinite);
     }
 
-    private int startupAttempts = 3;
-    private int restartAttempts = 5;
+    private int _startupAttempts = 3;
+    private int _restartAttempts = 5;
     
     private async void OnTimer(object? state)
     {
@@ -32,7 +32,7 @@ public class VideoSourceWatchdog : IObserver<IDecodedVideoFrame>, IDisposable
             // wait for start
             if (_lastFrameReceivedTime == null)
             {
-                if (--startupAttempts > 0)
+                if (--_startupAttempts > 0)
                     return;
 
                 await RestartSource();
