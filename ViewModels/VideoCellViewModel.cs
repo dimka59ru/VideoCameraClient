@@ -1,4 +1,5 @@
 using System;
+using App.Infrastructure.Settings;
 using App.Models;
 using App.Models.Settings;
 using App.VideoSources;
@@ -18,10 +19,12 @@ public class VideoCellViewModel : ViewModelBase, IDisposable
         set => this.RaiseAndSetIfChanged(ref _channelName, value);
     }
     
-    public VideoCellViewModel(int index)
+    public VideoCellViewModel(int index, SettingsManager<UserSettings> userSettingsManager)
     {
-        UserSettings.Load();
-        var channelSettingsMap = UserSettings.Instance.ChannelSettingsMap;
+        ArgumentNullException.ThrowIfNull(userSettingsManager);
+
+        var userSettings = userSettingsManager.Load();
+        var channelSettingsMap = userSettings.ChannelSettingsMap;
         Index = index;
         
         //IVideoSource vs = new RandomImagesVideoSource();

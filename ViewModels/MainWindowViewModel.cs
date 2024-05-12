@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using App.Infrastructure.Settings;
+using App.Models.Settings;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Media;
@@ -9,8 +11,9 @@ namespace App.ViewModels;
 
 public class MainWindowViewModel : ViewModelBase
 {
-    private ViewModelBase _currentPage;
-    public ViewModelBase CurrentPage
+    private readonly SettingsManager<UserSettings> _userSettingsManager;
+    private ViewModelBase? _currentPage;
+    public ViewModelBase? CurrentPage
     {
         get => _currentPage;
         set => this.RaiseAndSetIfChanged(ref _currentPage, value);
@@ -29,12 +32,14 @@ public class MainWindowViewModel : ViewModelBase
         new ListItemTemplate(typeof(SettingsPageViewModel), "SettingsRegular")
     ];
 
-    public MainWindowViewModel()
+    public MainWindowViewModel(SettingsManager<UserSettings> userSettingsManager)
     {
-        SelectedListItem = Items[0]; // Set Current Page
+        _userSettingsManager = userSettingsManager ?? throw new ArgumentNullException(nameof(userSettingsManager));
         
         this.WhenAnyValue(x => x.SelectedListItem)
             .Subscribe(OnSelectedListItemChanged);
+        
+        SelectedListItem = Items[0]; // Set Current Page
     }
 
     private void OnSelectedListItemChanged(ListItemTemplate? value)
@@ -47,7 +52,7 @@ public class MainWindowViewModel : ViewModelBase
         
         CurrentPage = true switch
         {
-            true when type == typeof(VideoPanelPageViewModel) => new VideoPanelPageViewModel(),
+            true when type == typeof(VideoPanelPageViewModel) => new VideoPanelPageViewModel(_userSettingsManager),
             true when type == typeof(SettingsPageViewModel) => new SettingsPageViewModel(),
             _ => CurrentPage
         };

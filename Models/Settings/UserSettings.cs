@@ -1,13 +1,12 @@
 using System.Collections.Generic;
-using App.Infrastructure;
 
 namespace App.Models.Settings;
 
-public class UserSettings : SettingsManager<UserSettings>
+public class UserSettings
 {
-    private Dictionary<int, ChannelSettings>? _channelSettingsMap;
     public int LastOpenPanelIndex { get; set; }
 
+    private Dictionary<int, ChannelSettings>? _channelSettingsMap;
     public Dictionary<int, ChannelSettings> ChannelSettingsMap
     {
         get => _channelSettingsMap ??= new Dictionary<int, ChannelSettings>();

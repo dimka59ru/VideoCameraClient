@@ -1,5 +1,7 @@
 using System;
 using System.Runtime.InteropServices;
+using App.Infrastructure.Settings;
+using App.Models.Settings;
 using App.Services;
 using App.ViewModels;
 using App.Views;
@@ -23,11 +25,15 @@ public partial class App : Application
 
     public override void OnFrameworkInitializationCompleted()
     {
+        //Initialize dependencies
+        var settingsRepository = new JsonFileSettingsRepository<UserSettings>();
+        var userSettingsManager = new UserSettingsManager(settingsRepository);
+        
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
             desktop.MainWindow = new MainWindow
             {
-                DataContext = new MainWindowViewModel(),
+                DataContext = new MainWindowViewModel(userSettingsManager),
             };
         }
 

@@ -1,6 +1,6 @@
 using System;
-using System.Collections.Generic;
 using System.Windows.Input;
+using App.Infrastructure.Settings;
 using App.Models.Settings;
 using ReactiveUI;
 
@@ -9,7 +9,8 @@ namespace App.ViewModels;
 
 public class ChannelSettingsViewModel : ViewModelBase, IDisposable
 {
-    private readonly Dictionary<int, ChannelSettings> _channelSettingsMap;
+    private readonly SettingsManager<UserSettings> _userSettingsManager;
+    private readonly UserSettings _userSettings;
     private ChannelSettings _loadedChannelSettings;
 
     private string? _channelName;
@@ -49,8 +50,11 @@ public class ChannelSettingsViewModel : ViewModelBase, IDisposable
 
     public ICommand SaveSettingsCommand { get; }
     
-    public ChannelSettingsViewModel(int channelIndex)
+    public ChannelSettingsViewModel(int channelIndex, SettingsManager<UserSettings> userSettingsManager)
     {
+        _userSettingsManager = userSettingsManager ?? throw new ArgumentNullException(nameof(userSettingsManager));
+        _userSettings = _userSettingsManager.Load();
+            
         ChannelIndex = channelIndex;
         ChannelName = channelIndex.ToString();
 
@@ -64,11 +68,9 @@ public class ChannelSettingsViewModel : ViewModelBase, IDisposable
                 && settingsChanged);
         
         SaveSettingsCommand = ReactiveCommand.Create(OnSaveSettings, canSaveSettingsCommandExecute);
-            
-        UserSettings.Load();
-        _channelSettingsMap = UserSettings.Instance.ChannelSettingsMap;
         
-        if (_channelSettingsMap.TryGetValue(channelIndex, out var channelSettings))
+        var channelSettingsMap = _userSettings.ChannelSettingsMap;
+        if (channelSettingsMap.TryGetValue(channelIndex, out var channelSettings))
         {
             ChannelName = string.IsNullOrEmpty(channelSettings.Name)
                 ? ChannelName
@@ -96,11 +98,12 @@ public class ChannelSettingsViewModel : ViewModelBase, IDisposable
     private void OnSaveSettings()
     {
         var streamUri = Uri.TryCreate(MainStreamUri, UriKind.Absolute, out var uri) ? uri : null;
-        _channelSettingsMap[ChannelIndex] = new ChannelSettings(ChannelName, streamUri, null, null);
-        _loadedChannelSettings = _channelSettingsMap[ChannelIndex];
+        var channelSettingsMap = _userSettings.ChannelSettingsMap;
+        channelSettingsMap[ChannelIndex] = new ChannelSettings(ChannelName, streamUri, null, null);
+        _loadedChannelSettings = channelSettingsMap[ChannelIndex];
         CheckIfPropertiesChanged();
         
-        UserSettings.Save();
+        _userSettingsManager.Save(_userSettings);
         SettingsChanged = true;
     }
 

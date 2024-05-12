@@ -1,6 +1,7 @@
 using System;
 using System.Collections.ObjectModel;
 using System.Reactive;
+using App.Infrastructure.Settings;
 using App.Models;
 using App.Models.Settings;
 using ReactiveUI;
@@ -9,6 +10,9 @@ namespace App.ViewModels;
 
 public class VideoPanelPageViewModel : ViewModelBase, IDisposable
 {
+    private readonly SettingsManager<UserSettings> _userSettingsManager;
+    private readonly UserSettings _userSettings;
+    
     private int _columnCount;
     public int ColumnCount
     {
@@ -31,7 +35,7 @@ public class VideoPanelPageViewModel : ViewModelBase, IDisposable
     }
     
     private int _selectedCellIndex;
-    public int SelectedCellIndex
+    private int SelectedCellIndex
     {
         get => _selectedCellIndex;
         set => this.RaiseAndSetIfChanged(ref _selectedCellIndex, value);
@@ -79,10 +83,12 @@ public class VideoPanelPageViewModel : ViewModelBase, IDisposable
     public ReactiveCommand<int, Unit> OpenCloseChannelSettingsCommand { get; }
 
     
-    public VideoPanelPageViewModel()
+    public VideoPanelPageViewModel(SettingsManager<UserSettings> userSettingsManager)
     {
-        UserSettings.Load();
-        SelectedPanelIndex = UserSettings.Instance.LastOpenPanelIndex;
+        _userSettingsManager = userSettingsManager ?? throw new ArgumentNullException(nameof(userSettingsManager));
+        _userSettings = _userSettingsManager.Load();
+        
+        SelectedPanelIndex = _userSettings.LastOpenPanelIndex;
         
         this.WhenAnyValue(x => x.SelectedPanelIndex)
             .Subscribe(OnSelectedPanelIndexChanged);
@@ -110,15 +116,15 @@ public class VideoPanelPageViewModel : ViewModelBase, IDisposable
         var selectedPanel = Panels[index];
         UpdateVideoPanel(selectedPanel);
 
-        UserSettings.Instance.LastOpenPanelIndex = SelectedPanelIndex;
-        UserSettings.Save();
+        _userSettings.LastOpenPanelIndex = SelectedPanelIndex;
+        _userSettingsManager.Save(_userSettings);
     }
     
     private void IsChannelSettingsOpenedChanged()
     {
         if (IsChannelSettingsOpened)
         {
-            ChannelSettings = new ChannelSettingsViewModel(SelectedCellIndex);
+            ChannelSettings = new ChannelSettingsViewModel(SelectedCellIndex, _userSettingsManager);
         }
         else
         {
@@ -126,7 +132,7 @@ public class VideoPanelPageViewModel : ViewModelBase, IDisposable
             if (ChannelSettings is { SettingsChanged: true })
             {
                 var oldCell = Cells[SelectedCellIndex];
-                Cells[SelectedCellIndex] = new VideoCellViewModel(SelectedCellIndex);
+                Cells[SelectedCellIndex] = new VideoCellViewModel(SelectedCellIndex, _userSettingsManager);
 
                 if (IsCellMaximized)
                 {
@@ -164,7 +170,7 @@ public class VideoPanelPageViewModel : ViewModelBase, IDisposable
         
         for (var i = currentCountCells; i < requiredCells; i++)
         {
-            var videoCell = new VideoCellViewModel(i);
+            var videoCell = new VideoCellViewModel(i, _userSettingsManager);
             Cells.Add(videoCell);
         }
         for (var i = currentCountCells; i > requiredCells; i--)
