@@ -9,6 +9,7 @@ using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using FFmpeg.AutoGen;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace App;
 
@@ -28,11 +29,19 @@ public partial class App : Application
         //Initialize dependencies
         var userSettingsManager = new UserSettingsManager();
         
+        // Register all the services needed for the application to run
+        var collection = new ServiceCollection();
+        collection.AddCommonServices();
+
+        // Creates a ServiceProvider containing services from the provided IServiceCollection
+        var services = collection.BuildServiceProvider();
+
+        var vm = services.GetRequiredService<MainWindowViewModel>();
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
             desktop.MainWindow = new MainWindow
             {
-                DataContext = new MainWindowViewModel(userSettingsManager),
+                DataContext = vm
             };
         }
 
@@ -59,5 +68,13 @@ public partial class App : Application
         };
 
         ffmpeg.av_log_set_callback(logCallback);
+    }
+}
+
+
+public static class ServiceCollectionExtensions {
+    public static void AddCommonServices(this IServiceCollection collection) {
+        collection.AddSingleton<ISettingsRepository<UserSettings>, UserSettingsManager>();
+        collection.AddTransient<MainWindowViewModel>();
     }
 }
