@@ -64,7 +64,7 @@ public class ChannelSettingsViewModel : ViewModelBase, IDisposable
             x => x.PropertiesChanged,
             (channelName, mainStreamUri, settingsChanged) => 
                 !string.IsNullOrEmpty(channelName)
-                && !string.IsNullOrEmpty(mainStreamUri) && Uri.TryCreate(mainStreamUri, UriKind.Absolute, out _)
+                && (string.IsNullOrEmpty(mainStreamUri) || !string.IsNullOrEmpty(mainStreamUri) && Uri.TryCreate(mainStreamUri, UriKind.Absolute, out _))
                 && settingsChanged);
         
         SaveSettingsCommand = ReactiveCommand.Create(OnSaveSettings, canSaveSettingsCommandExecute);
