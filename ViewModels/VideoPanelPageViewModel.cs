@@ -10,7 +10,7 @@ namespace App.ViewModels;
 
 public class VideoPanelPageViewModel : ViewModelBase, IDisposable
 {
-    private readonly SettingsManager<UserSettings> _userSettingsManager;
+    private readonly ISettingsRepository<UserSettings> _userSettingsManager;
     private readonly UserSettings _userSettings;
     
     private int _columnCount;
@@ -83,7 +83,7 @@ public class VideoPanelPageViewModel : ViewModelBase, IDisposable
     public ReactiveCommand<int, Unit> OpenCloseChannelSettingsCommand { get; }
 
     
-    public VideoPanelPageViewModel(SettingsManager<UserSettings> userSettingsManager)
+    public VideoPanelPageViewModel(ISettingsRepository<UserSettings> userSettingsManager)
     {
         _userSettingsManager = userSettingsManager ?? throw new ArgumentNullException(nameof(userSettingsManager));
         _userSettings = _userSettingsManager.Load();

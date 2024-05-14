@@ -9,7 +9,7 @@ namespace App.ViewModels;
 
 public class ChannelSettingsViewModel : ViewModelBase, IDisposable
 {
-    private readonly SettingsManager<UserSettings> _userSettingsManager;
+    private readonly ISettingsRepository<UserSettings> _userSettingsManager;
     private readonly UserSettings _userSettings;
     private ChannelSettings _loadedChannelSettings;
 
@@ -50,7 +50,7 @@ public class ChannelSettingsViewModel : ViewModelBase, IDisposable
 
     public ICommand SaveSettingsCommand { get; }
     
-    public ChannelSettingsViewModel(int channelIndex, SettingsManager<UserSettings> userSettingsManager)
+    public ChannelSettingsViewModel(int channelIndex, ISettingsRepository<UserSettings> userSettingsManager)
     {
         _userSettingsManager = userSettingsManager ?? throw new ArgumentNullException(nameof(userSettingsManager));
         _userSettings = _userSettingsManager.Load();

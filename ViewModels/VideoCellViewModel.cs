@@ -19,7 +19,7 @@ public class VideoCellViewModel : ViewModelBase, IDisposable
         set => this.RaiseAndSetIfChanged(ref _channelName, value);
     }
     
-    public VideoCellViewModel(int index, SettingsManager<UserSettings> userSettingsManager)
+    public VideoCellViewModel(int index, ISettingsRepository<UserSettings> userSettingsManager)
     {
         ArgumentNullException.ThrowIfNull(userSettingsManager);
 

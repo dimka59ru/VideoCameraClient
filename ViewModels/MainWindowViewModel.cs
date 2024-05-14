@@ -11,7 +11,7 @@ namespace App.ViewModels;
 
 public class MainWindowViewModel : ViewModelBase
 {
-    private readonly SettingsManager<UserSettings> _userSettingsManager;
+    private readonly ISettingsRepository<UserSettings> _userSettingsManager;
     private ViewModelBase? _currentPage;
     public ViewModelBase? CurrentPage
     {
@@ -32,7 +32,7 @@ public class MainWindowViewModel : ViewModelBase
         new ListItemTemplate(typeof(SettingsPageViewModel), "SettingsRegular")
     ];
 
-    public MainWindowViewModel(SettingsManager<UserSettings> userSettingsManager)
+    public MainWindowViewModel(ISettingsRepository<UserSettings> userSettingsManager)
     {
         _userSettingsManager = userSettingsManager ?? throw new ArgumentNullException(nameof(userSettingsManager));
         

@@ -26,8 +26,7 @@ public partial class App : Application
     public override void OnFrameworkInitializationCompleted()
     {
         //Initialize dependencies
-        var settingsRepository = new JsonFileSettingsRepository<UserSettings>();
-        var userSettingsManager = new UserSettingsManager(settingsRepository);
+        var userSettingsManager = new UserSettingsManager();
         
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {

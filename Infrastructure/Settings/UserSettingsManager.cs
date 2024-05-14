@@ -2,9 +2,6 @@ using App.Models.Settings;
 
 namespace App.Infrastructure.Settings;
 
-public class UserSettingsManager : SettingsManager<UserSettings>
+public class UserSettingsManager : JsonFileSettingsRepository<UserSettings>
 {
-    public UserSettingsManager(ISettingsRepository<UserSettings> settingsRepository) : base(settingsRepository)
-    {
-    }
 }
