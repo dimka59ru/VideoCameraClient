@@ -26,9 +26,6 @@ public partial class App : Application
 
     public override void OnFrameworkInitializationCompleted()
     {
-        //Initialize dependencies
-        var userSettingsManager = new UserSettingsManager();
-        
         // Register all the services needed for the application to run
         var collection = new ServiceCollection();
         collection.AddCommonServices();
