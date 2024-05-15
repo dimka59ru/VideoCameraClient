@@ -32,6 +32,9 @@
     <PackageReference Include="Avalonia.Xaml.Behaviors" Version="11.0.10.9" />
     <PackageReference Include="FFmpeg.AutoGen" Version="4.4.1.1" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
+    <PackageReference Include="Serilog" Version="4.0.0-dev-02167" />
+    <PackageReference Include="Serilog.Sinks.Console" Version="5.1.0-dev-00943" />
+    <PackageReference Include="Serilog.Sinks.File" Version="5.0.1-dev-00972" />
     <PackageReference Include="System.Text.Json" Version="8.0.3" />
   </ItemGroup>
 

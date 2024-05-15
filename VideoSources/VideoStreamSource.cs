@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using App.Models;
 using App.Services;
 using FFmpeg.AutoGen;
+using Serilog;
 
 namespace App.VideoSources;
 
@@ -66,7 +67,20 @@ public class VideoStreamSource : IVideoSource, IDisposable
     {
         _cancellationTokenSource?.Dispose();
         _cancellationTokenSource = new CancellationTokenSource();
-        Task.Run(() => DecodeVideoStream(_cancellationTokenSource.Token), _cancellationTokenSource.Token);
+        Task.Run(() => DecodeVideoStream(_cancellationTokenSource.Token),
+            _cancellationTokenSource.Token)
+            .ContinueWith(t =>
+            {
+                if (!t.IsFaulted) return;
+                
+                var ae = t.Exception;
+                if (ae == null) return;
+                foreach (var e in ae.InnerExceptions) 
+                {
+                    Log.Error(e, e.Message);
+                }
+            });
+        
         Console.WriteLine($"Source {_url} Start was called.");
     }
     

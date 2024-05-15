@@ -6,6 +6,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Media;
 using ReactiveUI;
+using Serilog;
 
 namespace App.ViewModels;
 
@@ -34,6 +35,8 @@ public class MainWindowViewModel : ViewModelBase
 
     public MainWindowViewModel(ISettingsRepository<UserSettings> userSettingsManager)
     {
+        Log.Information("App Started");
+        
         _userSettingsManager = userSettingsManager ?? throw new ArgumentNullException(nameof(userSettingsManager));
         
         this.WhenAnyValue(x => x.SelectedListItem)
