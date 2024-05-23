@@ -29,7 +29,8 @@ public static class FFmpegBinariesHelper
             }
         }
         else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
-            ffmpeg.RootPath = "/usr/lib64";
+            //ffmpeg.RootPath = "/usr/lib64";
+            ffmpeg.RootPath = "/lib/x86_64-linux-gnu"; // linux mint 21.3
         else
             throw new NotSupportedException(); // fell free add support for platform of your choose
     }
